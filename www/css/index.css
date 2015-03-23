@@ -1,0 +1,212 @@
+/*
+Course: MAD9022 Cross-Platform App Development
+Student: Vladimir Tonkonogov
+Project: Midterm App built using HTML, CSS & JavaScript and compiled for Android using Cordova
+ */
+/**************************************
+          DEFAULTS
+***************************************/
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+*:link,
+*:visited,
+*:hover,
+*:active,
+*:focus,
+.active {
+    -webkit-transition: color .5s linear, background-color .7s ease-out, opacity .5s ease-in-out, -webkit-transform .6s;
+    transition: color .5s linear, background-color .7s ease-out, opacity .5s ease-in-out, transform .6s .1s;
+}
+
+html {
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+
+html,
+body {
+    background-color: #222;
+}
+
+body {
+    font-size: 5vmin;
+    /* set the starting size for the app */
+}
+
+h2 {
+    font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 2.4rem;
+    line-height: 1.6;
+    color: #eee;
+}
+
+h4 {
+    font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #a4a5b5;
+    font-size: 1.4rem;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+p,
+li {
+    font-size: 1.2rem;
+    line-height: 2;
+    color: ##a4a5b5;
+    font-family: 'Antic Didone', Goudy Old Style, Garamond, Times New Roman, serif;
+}
+#contacts ul {
+     list-style: none;
+}
+
+#contacts li {
+    line-height: 2;
+    font-size: 1.2rem;
+    line-height: 3rem;
+    height: 3rem;
+    border: 1px solid #222;
+    background-color: #eee;
+    color: #333;
+    font-weight: 300;
+    padding: 0 1rem;
+    cursor: pointer;
+}
+/**************************************
+          PAGES
+**************************************/
+
+[data-role=page] {
+    width: 100%;
+    border-radius: 15px;
+    background-color: #9f9f9f;
+    color: #eee;
+    /*7rem is space for the app title 
+	as well as the navigation */
+    
+    position: absolute;
+    top: 7.2rem;
+    padding: 1rem 1rem 4rem 1rem;
+    display: block;
+    opacity: 1;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+}
+
+[data-role=page].active {
+    display: block;
+    border-radius: 15px;
+    min-height: 50%;
+    width: 100%;
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    background-color: #444;
+    border: 2px solid #eee;
+    //margin-left: 2px;
+}
+
+canvas {
+    border-radius: 15px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border: 2px solid #eee;
+}
+/**************************************
+          TITLE
+***************************************/
+
+.apptitle {
+    height: 3rem;
+    background-color: #444;
+    color: #FFDEEB;
+    border-radius: 0 0 15px 15px;
+    border: 2px solid #eee;
+}
+
+.apptitle h1 {
+    font-size: 1.0rem;
+    line-height: 2rem;
+    padding: 0.5rem 1.0rem;
+    text-align: center;
+    letter-spacing: 10px;
+    word-spacing: 10px;
+    font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+/**************************************
+          NAVBAR 
+***************************************/
+
+.tabs {
+    height: 4rem;
+}
+
+.tabs ul {
+    list-style: none;
+    overflow: hidden;
+}
+
+.tabs li {
+    float: left;
+    height: 4rem;
+}
+
+.li-1-2 {
+    width: 50%;
+    /* for 2 tabs each is 50% */
+}
+
+.tabs [data-role=pagelink] {
+    color: #777;
+    background: #444;
+    display: block;
+    text-align: center;
+    height: 4rem;
+    font-size: 2rem;
+    text-transform: uppercase;
+    font-family: 'Antic Didone', Goudy Old Style, Garamond, Times New Roman, serif;
+    line-height: 2rem;
+    padding: 1rem 1rem;
+    border-radius: 15%;
+    text-decoration: none;
+    border: 2px solid #eee;
+    /*    text-shadow: 2px 2px 10px #777;*/
+    /* shadow helps make the non-active tabs receed */
+    
+    -webkit-box-shadow: inset 2px 2px 6px rgba(33, 33, 33, 0.5);
+    -moz-box-shadow: inset 2px 2px 6px rgba(33, 33, 33, 0.5);
+    box-shadow: inset 2px 2px 6px rgba(33, 33, 33, 0.5);
+}
+
+.tabs [data-role=pagelink].activetab {
+    background: #ddd;
+    /* match the background of the screen */
+    
+    color: #CC7498;
+    /* colour makes the active tab jump forward */
+    
+    border-radius: 15%;
+    font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-shadow: 2px 2px 10px #CC7498;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.tabs [data-role=pagelink].activetab svg {
+    fill: #000;
+}
+/**************************************
+          ICONS 
+***************************************/
+
+svg {
+    -webkit-transform: translateY(-5px);
+    -ms-transform: translateY(-5px);
+    transform: translateY(-5px);
+}
