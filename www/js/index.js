@@ -254,17 +254,25 @@ var tonk0006_midterm = {
 
         var output2 = document.querySelector('#modal');
         var p = document.createElement('p');
-        var arr = JSON.parse(localStorage.getItem('contactsArray'));
-        p.innerHTML = item + ' ' + arr; 
+        var stringArr = localStorage.getItem('myContactsArray');
+        console.log('\n\tFROM LOCAL STORAGE:');
+        console.log(stringArr);
+        var realArr = JSON.parse(stringArr);
+        console.log(realArr);
+        var n = (item - 20);
+        p.innerHTML = realArr[n].id; 
         output2.appendChild(p);
-
-        this.fromLocalStorage;
 
     },
 
     closeModalWindow: function (ev) {
         document.querySelector("[data-role=modal]").style.display = "none";
         document.querySelector("[data-role=overlay]").style.display = "none";
+        
+        var output2 = document.querySelector('#modal');
+        var p = document.querySelector('p');
+        output2.removeChild(p);
+        
     },
 
     // Failed to get the contacts
