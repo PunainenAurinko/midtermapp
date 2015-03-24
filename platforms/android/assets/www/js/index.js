@@ -21,7 +21,7 @@ var tonk0006_midterm = {
     bindEvents: function () {
         document.addEventListener('DOMContentLoaded', this.onContentLoaded, false);
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        //        window.addEventListener('popstate', this.browserBackButton, false);
+        document.addEventListener('backbutton', this.browserBackButton, false);
         //        this.loadPage(null);
 
         //        var hammer = new Hammer.Manager(li, {});
@@ -53,6 +53,27 @@ var tonk0006_midterm = {
         //        }
 
 
+    },
+    browserBackButton: function (ev) {
+        //        alert("STOP");
+        ev.preventDefault();
+        //        url = location.hash; //hash will include the "#"
+        //        //update the visible div and the active tab
+        //        for (var i = 0; i < numPages; i++) {
+        //            if (('#' + pages[i].id) == url) {
+        //                pages[i].style.display = 'block';
+        //                pages[i].className = 'active';
+        //            } else {
+        //                pages[i].className = '';
+        //                pages[i].style.display = 'block';
+        //            }
+        //        }
+        //        for (var t = 0; t < numLinks; t++) {
+        //            links[t].className = '';
+        //            if (links[t].href == location.href) {
+        //                links[t].className = 'activetab';
+        //            }
+        //        }
     },
 
     // DOMContentLoaded event handler function
@@ -158,14 +179,21 @@ var tonk0006_midterm = {
             contact.id = i;
             contact.name = contacts[i].displayName;
 
-            for (var l = 0; l < contacts[i].phoneNumbers.length; l++) {
-                if (contacts[i].phoneNumbers.length > 1) {
-                    contact.numbers = [contacts[i].phoneNumbers[l].type, contacts[i].phoneNumbers[l].value];
-                } else {
-                    contact.numbers = [contacts[i].phoneNumbers[0].type, contacts[i].phoneNumbers[0].value];
+            if (contacts[i].phoneNumbers.length) {
+                contact.numbers = [];
+                for (var l = 0; l < contacts[i].phoneNumbers.length; l++) {
+                    contact.numbers.push(contacts[i].phoneNumbers[l].type + ': ' + contacts[i].phoneNumbers[l].value + '\n');
+                    
+                    /*
+                    if (contacts[i].phoneNumbers.length > 1) {
+                        console.log ("MORE THEN 1");
+                        contact.numbers = [contacts[i].phoneNumbers[l].type, contacts[i].phoneNumbers[l].value];
+                    } else {
+                        contact.numbers = [contacts[i].phoneNumbers[0].type, contacts[i].phoneNumbers[0].value];
+                        console.log ("ONLY 1");
+                    }*/
                 }
             }
-
             contact.lat = '';
             contact.lng = '';
             contactsArray.push(contact);
@@ -243,7 +271,7 @@ var tonk0006_midterm = {
     },
 
     displayFullContact: function (ev) {
-//        ev.stopPropagation();
+        //        ev.stopPropagation();
 
         document.querySelector("[data-role=modal]").style.display = "block";
         document.querySelector("[data-role=overlay]").style.display = "block";
@@ -260,7 +288,8 @@ var tonk0006_midterm = {
         var realArr = JSON.parse(stringArr);
         console.log(realArr);
         var n = (item - 20);
-        p.innerHTML = realArr[n].id; 
+        p.innerHTML = realArr[n].name + '<br/>';
+        p.innerHTML += realArr[n].numbers;
         output2.appendChild(p);
 
     },
@@ -268,11 +297,11 @@ var tonk0006_midterm = {
     closeModalWindow: function (ev) {
         document.querySelector("[data-role=modal]").style.display = "none";
         document.querySelector("[data-role=overlay]").style.display = "none";
-        
+
         var output2 = document.querySelector('#modal');
         var p = document.querySelector('p');
         output2.removeChild(p);
-        
+
     },
 
     // Failed to get the contacts

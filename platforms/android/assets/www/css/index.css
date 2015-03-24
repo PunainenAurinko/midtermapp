@@ -125,7 +125,8 @@ li {
 *************************************/
 
 [data-role=listview] {
-/*    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
+    /*    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
+    
     list-style: none;
 }
 
@@ -140,7 +141,6 @@ li {
     padding: 0 1rem;
     cursor: pointer;
 }
-
 /*
 [data-role=listview] li.active {
     background: #33b5e5;
@@ -193,6 +193,9 @@ select {
     color: #444;
     background: #eee;
     border-radius: 10px;
+    position: absolute;
+    margin-top: 4rem;
+    bottom: 0;
 }
 /*
 
