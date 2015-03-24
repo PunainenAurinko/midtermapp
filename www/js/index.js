@@ -203,13 +203,13 @@ var tonk0006_midterm = {
         var modalClose = new Hammer(document.getElementById("closeButton"));
         modalClose.on('tap', tonk0006_midterm.closeModalWindow);
 
-//        document.querySelector('[data-role=listview]').addEventListener('click', tonk0006_midterm.displayFullContact);
-//        document.getElementById('closeButton').addEventListener('click', tonk0006_midterm.closeModalWindow);
+        //        document.querySelector('[data-role=listview]').addEventListener('click', tonk0006_midterm.displayFullContact);
+        //        document.getElementById('closeButton').addEventListener('click', tonk0006_midterm.closeModalWindow);
 
         localStorage.setItem('myContactsArray', JSON.stringify(contactsArray));
 
         this.clickEventsFunc;
-        this.toLocalStorage;
+        //        this.toLocalStorage;
     },
 
     clickEventsFunc: function () {
@@ -242,27 +242,24 @@ var tonk0006_midterm = {
 
     },
 
-    toLocalStorage: function () {
-        localStorage.setItem('myContactsArray', JSON.stringify(contactsArray));
-    },
-
-    displayFullContact: function () {
-        //ev.stopPropagation();
+    displayFullContact: function (ev) {
+//        ev.stopPropagation();
 
         document.querySelector("[data-role=modal]").style.display = "block";
         document.querySelector("[data-role=overlay]").style.display = "block";
-        
-        
+
+        var item = ev.target.getAttribute("data-ref");
+        var itemVal = ev.target.innerHTML;
+        document.getElementById("modal").value = item;
+
+        var output2 = document.querySelector('#modal');
+        var p = document.createElement('p');
+        var arr = JSON.parse(localStorage.getItem('contactsArray'));
+        p.innerHTML = item + ' ' + arr; 
+        output2.appendChild(p);
 
         this.fromLocalStorage;
 
-    },
-
-    fromLocalStorage: function () {
-        localStorage.getItem('contactsArray', JSON.parse(contactsArray));
-
-        console.log(s);
-        console.log(contactsArray);
     },
 
     closeModalWindow: function (ev) {
