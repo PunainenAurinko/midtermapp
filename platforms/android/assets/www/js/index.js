@@ -7,8 +7,8 @@ Project: Midterm App built using HTML, CSS & JavaScript and compiled for Android
 // Application Constructor
 //
 var tonk0006_midterm = {
-    lat: '',
-    lng: '',
+    latitude: '',
+    longitude: '',
     init: function () {
         this.bindEvents();
     },
@@ -64,7 +64,7 @@ var tonk0006_midterm = {
         }
     },
 
-    // Make an array of objects
+    // Display listview list on page. Set contacts array to localStorage.
     //
     foundContacts: function (contacts) {
         console.log('\n\tALL PHONE CONTACTS:');
@@ -85,7 +85,7 @@ var tonk0006_midterm = {
             if (contacts[i].phoneNumbers.length) {
                 contact.numbers = [];
                 for (var l = 0; l < contacts[i].phoneNumbers.length; l++) {
-                    contact.numbers.push(contacts[i].phoneNumbers[l].type + ': ' + contacts[i].phoneNumbers[l].value + '\n');
+                    contact.numbers.push(contacts[i].phoneNumbers[l].type + ': ' + contacts[i].phoneNumbers[l].value + '\r');
 
                     /*
                     if (contacts[i].phoneNumbers.length > 1) {
@@ -114,6 +114,10 @@ var tonk0006_midterm = {
         var s = JSON.stringify(contactsArray);
         console.log(s);
 
+        localStorage.setItem('myContactsArray', s);
+
+        // Hammer.js event listeners
+
         var hammer = document.querySelector('[data-role="listview"]');
         var hm = new Hammer.Manager(hammer);
         var singleTap = new Hammer.Tap({
@@ -140,8 +144,6 @@ var tonk0006_midterm = {
         //        document.querySelector('[data-role=listview]').addEventListener('click', tonk0006_midterm.displayFullContact);
         //        document.getElementById('closeButton').addEventListener('click', tonk0006_midterm.closeModalWindow);
 
-        localStorage.setItem('myContactsArray', JSON.stringify(contactsArray));
-
     },
 
     displayFullContact: function (ev) {
@@ -150,9 +152,9 @@ var tonk0006_midterm = {
         document.querySelector('[data-role=modal]').style.display = 'block';
         document.querySelector('[data-role=overlay]').style.display = 'block';
 
-        var item = ev.target.getAttribute("data-ref");
+        var item = ev.target.getAttribute('data-ref');
         var itemVal = ev.target.innerHTML;
-        document.getElementById("modal").value = item;
+        document.getElementById('modal').value = item;
 
         var output2 = document.querySelector('#modal');
         var p = document.createElement('p');
@@ -163,9 +165,13 @@ var tonk0006_midterm = {
         console.log(realArr);
         var n = (item - 20);
         p.innerHTML = realArr[n].name + '<br/>';
-        p.innerHTML += realArr[n].numbers;
+        var nummmm = realArr[n].numbers;
+        console.log(nummmm);
+        var nummmmString = nummmm.join(" ");
+        console.log(nummmmString);
+        p.innerHTML += nummmmString;
+        console.log(p);
         output2.appendChild(p);
-
     },
 
     displayMapPage: function () {
@@ -234,7 +240,7 @@ var tonk0006_midterm = {
         });
     },
 
-    // Diplay Google static map of current location with a marker in the centre using Google Maps Staticdev API
+    // Diplay Google dynamic map of current location with a marker in the centre using Google Maps Embed API
     // Visible map width is taken as 91.5% of device screen width
 
     drawMap: function () {
@@ -265,7 +271,8 @@ var tonk0006_midterm = {
         iframe.setAttribute("scrolling", "0");
         iframe.setAttribute("marginheight", "0");
         iframe.setAttribute("marginwidth", "0");
-        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 + "+" + part2 + "+" + part3 + "+" + part4 + "+" + part5 + "+" + part6 + "/@" + latitude + "," + longitude + ",17z&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
+        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 + "+" + part2 + "+" + part3 + "+" + part4 + "+" + part5 + "+" + part6 + ",17z&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
+        //        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/view?key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk&center=" +  latitude + "," + longitude + "&zoom=13&maptype=roadmap");
         var output7 = document.querySelector("#map");
         output7.appendChild(iframe);
     },
@@ -276,8 +283,8 @@ var tonk0006_midterm = {
 
         var output4 = document.querySelector('#modal');
         var p = document.querySelector('p');
-        output4.removeChild(p);
-
+        if (p !== null)
+            output4.removeChild(p);
     },
 
     goBackFromMap: function (ev) {
@@ -292,26 +299,8 @@ var tonk0006_midterm = {
     browserBackButton: function (ev) {
         //        alert("STOP");
         ev.preventDefault();
+        tonk0006_midterm.goBackFromMap();
         tonk0006_midterm.closeModalWindow();
-
-        //        var pages = [],
-        //            links = [],
-        //            numLinks = 0,
-        //            numPages = 0;
-        //
-        //        var pages = document.querySelectorAll('[data-role="page"]');
-        //        numPages = pages.length;
-        //        url = location.hash;
-        //
-        //        for (var i = 0; i < numPages; i++) {
-        //            if (('#' + pages[i].id) == url) {
-        //                pages[i].style.display = 'block';
-        //                pages[i].style.zIndex = '15';
-        //            } else {
-        //                pages[i].style.display = 'none';
-        //                pages[i].style.zIndex = '3';
-        //            }
-        //        }
     },
 
     // Failed to get the contacts

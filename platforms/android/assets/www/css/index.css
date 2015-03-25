@@ -13,16 +13,6 @@ Project: Midterm App built using HTML, CSS & JavaScript and compiled for Android
     box-sizing: border-box;
 }
 
-*:link,
-*:visited,
-*:hover,
-*:active,
-*:focus,
-.active {
-    -webkit-transition: color .5s linear, background-color .7s ease-out, opacity .5s ease-in-out, -webkit-transform .6s;
-    transition: color .5s linear, background-color .7s ease-out, opacity .5s ease-in-out, transform .6s .1s;
-}
-
 html,
 body {
     background-color: #222;
@@ -44,8 +34,11 @@ h4 {
     font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #a4a5b5;
     font-size: 1.4rem;
-    margin-top: 10px;
-    margin-bottom: 20px;
+}
+
+[data-role=page]#map h4 {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 p,
@@ -54,6 +47,10 @@ li {
     line-height: 2;
     color: ##a4a5b5;
     font-family: 'Antic Didone', Goudy Old Style, Garamond, Times New Roman, serif;
+}
+
+p:last-child {
+    margin-bottom: 2rem;
 }
 /*************************************
         Layout
@@ -117,7 +114,7 @@ li {
 }
 
 iframe {
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
 }
 /**************************************
           TITLE
@@ -190,43 +187,21 @@ select {
 
 .btn {
     width: auto;
-}
-
-.med {
-    width: 10rem;
-}
-
-.lg {
-    width: 25rem;
-}
-
-.xlg {
-    width: 40rem;
+    font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    color: #eee;
+    background: #777;
+    border-radius: 10px;
+    outline: none;
+    border-style: none;
+    border: 1px solid #eee;
 }
 /*************************************
         Modals
 *************************************/
 
-#closeButton, #backButton {
-    font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1rem;
-    color: #444;
-    background: #eee;
-    border-radius: 10px;
-}
-
 #closeButton {
     position: absolute;
-    bottom: 0;
+    bottom: 1rem;
+    margin: 0 auto;
 }
-/*
-
-#closeButton.active {
-    font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1rem;
-    color: #eee;
-    background: #444;
-    //background: #33b5e5;
-    border-radius: 10px;
-}
-*/
