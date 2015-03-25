@@ -19,13 +19,16 @@ var tonk0006_midterm = {
         document.addEventListener('DOMContentLoaded', this.onContentLoaded, false);
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.addEventListener('backbutton', this.browserBackButton, false);
+        //        window.addEventListener('popstate', this.popstateEvent, false);
+        //        google.maps.event.addDomListener(window, 'load', this.mapInit, false);
     },
 
     // DOMContentLoaded event handler function
     //
     onContentLoaded: function () {
-        document.querySelector("[data-role=modal]").style.display = "none";
-        document.querySelector("[data-role=overlay]").style.display = "none";
+        document.querySelector('[data-role=modal]').style.display = 'none';
+        document.querySelector('[data-role=overlay]').style.display = 'none';
+        document.querySelector('[data-role=page]#map').style.display = 'none';
     },
 
     // deviceready Event Handler
@@ -33,6 +36,13 @@ var tonk0006_midterm = {
     onDeviceReady: function () {
         tonk0006_midterm.receivedEvent('deviceready');
     },
+
+    // popstate Event Handler
+    //
+    //    popstateEvent: function (event) {
+    //        console.log('popstate fired!');
+    //        updateContent(event.state);
+    //    },
 
     // Initiate Cordova specific APIs
     //
@@ -76,7 +86,7 @@ var tonk0006_midterm = {
         output.appendChild(ul);
 
         var contactsArray = [];
-        for (var i = 20; i < 32; i++) {
+        for (var i = 0; i < 12; i++) {
 
             var contact = {};
             contact.id = i;
@@ -125,29 +135,32 @@ var tonk0006_midterm = {
         });
         var doubleTap = new Hammer.Tap({
             event: 'doubletap',
-            taps: 2
+            taps: 2,
+            threshold: 10,
+            posThreshold: 40
         });
 
         hm.add([doubleTap, singleTap]);
-        doubleTap.recognizeWith('singletap');
-        singleTap.requireFailure('doubletap');
+        //        doubleTap.recognizeWith('singletap');
+        doubleTap.requireFailure(singleTap);
 
         hm.on('singletap', tonk0006_midterm.displayFullContact);
         hm.on('doubletap', tonk0006_midterm.displayMapPage);
 
-        var modalClose = new Hammer(document.getElementById("closeButton"));
+        var modalClose = new Hammer(document.getElementById('closeButton'));
         modalClose.on('tap', tonk0006_midterm.closeModalWindow);
 
-        var backFromMapPage = new Hammer(document.getElementById("backButton"));
+        var backFromMapPage = new Hammer(document.getElementById('backButton'));
         backFromMapPage.on('tap', tonk0006_midterm.goBackFromMap);
 
         //        document.querySelector('[data-role=listview]').addEventListener('click', tonk0006_midterm.displayFullContact);
         //        document.getElementById('closeButton').addEventListener('click', tonk0006_midterm.closeModalWindow);
+        //        document.getElementById('backButton').addEventListener('click', tonk0006_midterm.goBackFromMap);
 
     },
 
     displayFullContact: function (ev) {
-        //        ev.stopPropagation();
+//        ev.stopPropagation();
 
         document.querySelector('[data-role=modal]').style.display = 'block';
         document.querySelector('[data-role=overlay]').style.display = 'block';
@@ -160,10 +173,10 @@ var tonk0006_midterm = {
         var p = document.createElement('p');
         var stringArr = localStorage.getItem('myContactsArray');
         console.log('\n\tFROM LOCAL STORAGE:');
-        console.log(stringArr);
+        //        console.log(stringArr);
         var realArr = JSON.parse(stringArr);
         console.log(realArr);
-        var n = (item - 20);
+        var n = item;
         p.innerHTML = realArr[n].name + '<br/>';
         var nummmm = realArr[n].numbers;
         console.log(nummmm);
@@ -179,8 +192,6 @@ var tonk0006_midterm = {
         document.querySelector('[data-role=page]').style.display = 'none';
         document.querySelector('[data-role=page]#map').style.display = 'block';
         document.querySelector('[data-role=page]#map').style.zIndex = '15';
-
-
 
     },
 
@@ -240,8 +251,37 @@ var tonk0006_midterm = {
         });
     },
 
-    // Diplay Google dynamic map of current location with a marker in the centre using Google Maps Embed API
-    // Visible map width is taken as 91.5% of device screen width
+    // Starting Code for Google JavaScript API v3 Map
+    // 
+
+    //    mapInit: function () {
+    //        var mapOptions = {
+    //                zoom: 4,
+    //                center: new google.maps.LatLng(latitude, longitude)
+    //            
+    //            },
+    //
+    //            var map = new google.maps.Map(document.getElementById('map-canvas'),
+    //                mapOptions);
+    //
+    //        var marker = new google.maps.Marker({
+    //            position: map.getCenter(),
+    //            map: map,
+    //            title: 'Click to zoom'
+    //        });
+    //
+
+
+
+    //    mapInit: function () {
+    //        var mapOptions = {
+    //            zoom: 13,
+    //            center: new google.maps.LatLng(latitude, longitude),
+    //        }
+    //    },
+
+    // Diplay dymanic Google map of current location with a marker in the centre
+    // 
 
     drawMap: function () {
         var text = document.querySelector("#text").innerHTML;
@@ -271,7 +311,7 @@ var tonk0006_midterm = {
         iframe.setAttribute("scrolling", "0");
         iframe.setAttribute("marginheight", "0");
         iframe.setAttribute("marginwidth", "0");
-        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 + "+" + part2 + "+" + part3 + "+" + part4 + "+" + part5 + "+" + part6 + ",17z&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
+        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 + "+" + part2 + "+" + part3 + "+" + part4 + "+" + part5 + "+" + part6 + "&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
         //        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/view?key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk&center=" +  latitude + "," + longitude + "&zoom=13&maptype=roadmap");
         var output7 = document.querySelector("#map");
         output7.appendChild(iframe);
