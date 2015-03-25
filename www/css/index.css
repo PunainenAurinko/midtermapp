@@ -74,6 +74,22 @@ li {
     border: 2px solid #eee;
 }
 
+[data-role=page]#map {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    top: 3rem;
+    color: #eee;
+    background-color: #444;
+    padding: 1rem;
+    border-radius: 15px;
+    border: 2px solid #eee;
+}
+
 [data-role=overlay] {
     position: fixed;
     top: 0;
@@ -98,6 +114,10 @@ li {
     color: #eee;
     background-color: rgba(68, 68, 68, 0.82);
     box-shadow: 1px 1px 2px rgb(0, 0, 0);
+}
+
+iframe {
+    margin-bottom: 2rem;
 }
 /**************************************
           TITLE
@@ -187,14 +207,16 @@ select {
         Modals
 *************************************/
 
-#closeButton {
+#closeButton, #backButton {
     font-family: 'Julius Sans One', "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1rem;
     color: #444;
     background: #eee;
     border-radius: 10px;
+}
+
+#closeButton {
     position: absolute;
-    margin-top: 4rem;
     bottom: 0;
 }
 /*

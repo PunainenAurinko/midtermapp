@@ -4,12 +4,9 @@ Student: Vladimir Tonkonogov
 Project: Midterm App built using HTML, CSS & JavaScript and compiled for Android using Cordova
  */
 
+// Application Constructor
+//
 var tonk0006_midterm = {
-    // Application Constructor
-    pages: [],
-    links: [],
-    numLinks: 0,
-    numPages: 0,
     lat: '',
     lng: '',
     init: function () {
@@ -22,58 +19,6 @@ var tonk0006_midterm = {
         document.addEventListener('DOMContentLoaded', this.onContentLoaded, false);
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.addEventListener('backbutton', this.browserBackButton, false);
-        //        this.loadPage(null);
-
-        //        var hammer = new Hammer.Manager(li, {});
-        //
-        //        var singleTap = new Hammer.Tap({
-        //            event: 'singletap'
-        //        });
-        //        var doubleTap = new Hammer.Tap({
-        //            event: 'doubletap',
-        //            taps: 2
-        //        });
-        //
-        //        hammer.add([doubleTap, singleTap]);
-        //        doubleTap.recognizeWith(singleTap);
-        //        singleTap.requireFailure(doubleTap);
-        //
-        //        if (tapCount === 0) {
-        //            // no failing requirements, immediately trigger the tap event
-        //            // or wait as long as the multitap interval to trigger
-        //            if (!this.hasRequireFailures()) {
-        //                return STATE_RECOGNIZED;
-        //            } else {
-        //                this._timer = setTimeoutContext(function () {
-        //                    this.state = STATE_RECOGNIZED;
-        //                    this.tryEmit();
-        //                }, options.interval, this);
-        //                return STATE_BEGAN;
-        //            }
-        //        }
-
-
-    },
-    browserBackButton: function (ev) {
-        //        alert("STOP");
-        ev.preventDefault();
-        //        url = location.hash; //hash will include the "#"
-        //        //update the visible div and the active tab
-        //        for (var i = 0; i < numPages; i++) {
-        //            if (('#' + pages[i].id) == url) {
-        //                pages[i].style.display = 'block';
-        //                pages[i].className = 'active';
-        //            } else {
-        //                pages[i].className = '';
-        //                pages[i].style.display = 'block';
-        //            }
-        //        }
-        //        for (var t = 0; t < numLinks; t++) {
-        //            links[t].className = '';
-        //            if (links[t].href == location.href) {
-        //                links[t].className = 'activetab';
-        //            }
-        //        }
     },
 
     // DOMContentLoaded event handler function
@@ -83,82 +28,40 @@ var tonk0006_midterm = {
         document.querySelector("[data-role=overlay]").style.display = "none";
     },
 
-    //    // Handle the click event
-    //
-    //    handleNav: function (ev) {
-    //        ev.preventDefault();
-    //        var href = ev.currentTarget.href;
-    //        var parts = href.split('#');
-    //        console.log('Clicked: page ' + parts[1]);
-    //        this.loadPage(parts[1]);
-    //        return false;
-    //    },
-
-    //    // Deal with history API and switching divs, and enable transitions
-    //
-    //    loadPage: function (url) {
-    //        if (url == null) {
-    //            //home page first call
-    //            pages[0].style.display = 'block';
-    //            history.replaceState(null, null, '#home');
-    //        } else {
-    //
-    //            for (var i = 0; i < numPages; i++) {
-    //                if (pages[i].id == url) {
-    //                    pages[i].style.display = 'block';
-    //                    pages[i].className = 'active';
-    //                    history.pushState(null, null, '#' + url);
-    //                } else {
-    //                    pages[i].className = '';
-    //                    pages[i].style.display = 'block';
-    //                }
-    //            }
-    //            for (var t = 0; t < numLinks; t++) {
-    //                links[t].className = '';
-    //                if (links[t].href == location.href) {
-    //                    links[t].className = 'activetab';
-    //                }
-    //            }
-    //        }
-    //    },
-    //
-    //    // Function to handle the back button
-    //    //
-    //    browserBackButton: function (ev) {
-    //        url = location.hash; //hash will include the "#"
-    //        //update the visible div and the active tab
-    //        for (var i = 0; i < numPages; i++) {
-    //            if (('#' + pages[i].id) == url) {
-    //                pages[i].style.display = 'block';
-    //                pages[i].className = 'active';
-    //            } else {
-    //                pages[i].className = '';
-    //                pages[i].style.display = 'block';
-    //            }
-    //        }
-    //        for (var t = 0; t < numLinks; t++) {
-    //            links[t].className = '';
-    //            if (links[t].href == location.href) {
-    //                links[t].className = 'activetab';
-    //            }
-    //        }
-    //    },
-
     // deviceready Event Handler
     //
     onDeviceReady: function () {
         tonk0006_midterm.receivedEvent('deviceready');
     },
 
-    // Find contacts
+    // Initiate Cordova specific APIs
     //
     receivedEvent: function () {
+
+        // Contacts API call
 
         var options = new ContactFindOptions();
         options.filter = '';
         options.multiple = true;
         var filter = ['displayName', 'phoneNumbers'];
         navigator.contacts.find(filter, this.foundContacts, this.foundNothing, options);
+
+        // Geolocation API call
+
+        if (navigator.geolocation) {
+
+            var params = {
+                enableHighAccuracy: true,
+                timeout: 30000,
+                maximumAge: 90000
+            };
+
+            navigator.geolocation.getCurrentPosition(this.findCoordinates, this.gpsError, params);
+
+        } else {
+            //browser does not support geolocation
+            alert("Sorry, somethign prevented your phone from determening your location.")
+        }
     },
 
     // Make an array of objects
@@ -183,7 +86,7 @@ var tonk0006_midterm = {
                 contact.numbers = [];
                 for (var l = 0; l < contacts[i].phoneNumbers.length; l++) {
                     contact.numbers.push(contacts[i].phoneNumbers[l].type + ': ' + contacts[i].phoneNumbers[l].value + '\n');
-                    
+
                     /*
                     if (contacts[i].phoneNumbers.length > 1) {
                         console.log ("MORE THEN 1");
@@ -226,55 +129,26 @@ var tonk0006_midterm = {
         singleTap.requireFailure('doubletap');
 
         hm.on('singletap', tonk0006_midterm.displayFullContact);
-        //                hm.on('doubletap', tonk0006_midterm.displayMap);
+        hm.on('doubletap', tonk0006_midterm.displayMapPage);
 
         var modalClose = new Hammer(document.getElementById("closeButton"));
         modalClose.on('tap', tonk0006_midterm.closeModalWindow);
+
+        var backFromMapPage = new Hammer(document.getElementById("backButton"));
+        backFromMapPage.on('tap', tonk0006_midterm.goBackFromMap);
 
         //        document.querySelector('[data-role=listview]').addEventListener('click', tonk0006_midterm.displayFullContact);
         //        document.getElementById('closeButton').addEventListener('click', tonk0006_midterm.closeModalWindow);
 
         localStorage.setItem('myContactsArray', JSON.stringify(contactsArray));
 
-        this.clickEventsFunc;
-        //        this.toLocalStorage;
-    },
-
-    clickEventsFunc: function () {
-
-        //        var hammer = document.querySelector('[data-role="listview"]');
-        //        var hm = new Hammer.Manager(hammer);
-        //        var singleTap = new Hammer.Tap({
-        //            event: 'singletap',
-        //            domEvents: true
-        //        });
-        //        var doubleTap = new Hammer.Tap({
-        //            event: 'doubletap',
-        //            taps: 2
-        //        });
-        //
-        //        hm.add([doubleTap, singleTap]);
-        //        doubleTap.recognizeWith('singletap');
-        //        singleTap.requireFailure('doubletap');
-        //
-        //        hm.on('singletap', tonk0006_midterm.displayFullContact);
-        //        //                hm.on('doubletap', tonk0006_midterm.displayMap);
-        //
-        //        var modalClose = new Hammer(document.getElementById("closeButton"));
-        //        modalClose.on('tap', tonk0006_midterm.closeModalWindow);
-
-        console.log('Arrived here 2!');
-
-        //        document.querySelector('[data-role=listview]').addEventListener('click', this.displayFullContact);
-        //        document.getElementById('closeButton').addEventListener('click', this.closeModalWindow);
-
     },
 
     displayFullContact: function (ev) {
         //        ev.stopPropagation();
 
-        document.querySelector("[data-role=modal]").style.display = "block";
-        document.querySelector("[data-role=overlay]").style.display = "block";
+        document.querySelector('[data-role=modal]').style.display = 'block';
+        document.querySelector('[data-role=overlay]').style.display = 'block';
 
         var item = ev.target.getAttribute("data-ref");
         var itemVal = ev.target.innerHTML;
@@ -294,17 +168,154 @@ var tonk0006_midterm = {
 
     },
 
-    closeModalWindow: function (ev) {
-        document.querySelector("[data-role=modal]").style.display = "none";
-        document.querySelector("[data-role=overlay]").style.display = "none";
+    displayMapPage: function () {
 
-        var output2 = document.querySelector('#modal');
-        var p = document.querySelector('p');
-        output2.removeChild(p);
+        document.querySelector('[data-role=page]').style.display = 'none';
+        document.querySelector('[data-role=page]#map').style.display = 'block';
+        document.querySelector('[data-role=page]#map').style.zIndex = '15';
+
+
 
     },
 
+    // Get location coordinates
+    //
+    findCoordinates: function (position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+
+        console.log("\n\tCOORDINATES:");
+        console.log("Latitude: " + latitude);
+        console.log("Longitude: " + longitude);
+
+        tonk0006_midterm.findStreetAddress();
+    },
+
+    // Handle error messages for findCoordinates function
+    //
+    gpsError: function (error) {
+        var errors = {
+            1: 'Permission denied',
+            2: 'Position unavailable',
+            3: 'Request timeout'
+        };
+        alert("Error: " + errors[error.code]);
+    },
+
+    // Get and display human-readable street address based on the found coordinates using Google Maps JavaScript API v3 Reverse Geocoding process
+
+    // Full street address is transmitted interchengeably either in results[0].formatted_address or in results[1].formatted_address, therefore the inner if statement is used to pick between them
+
+    findStreetAddress: function () {
+        var geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(latitude, longitude);
+        geocoder.geocode({
+            'latLng': latlng
+        }, function (results, status) {
+            console.log("\n\tGEOCODING:");
+            console.log("Geocoding status: " + status);
+            console.log(results);
+            if (status == google.maps.GeocoderStatus.OK) {
+                console.log("Address 0: " + results[0].formatted_address);
+                console.log("Address 1: " + results[1].formatted_address + "\n");
+                var h4 = document.createElement("h4");
+                if (results[1].formatted_address.length > results[0].formatted_address.length) {
+                    h4.innerHTML = results[1].formatted_address;
+                } else {
+                    h4.innerHTML = results[0].formatted_address;
+                }
+                var output5 = document.querySelector("#map");
+                output5.appendChild(h4);
+                h4.setAttribute("id", "text");
+                tonk0006_midterm.drawMap();
+            } else {
+                alert("Geocoder failed due to: " + status);
+            }
+        });
+    },
+
+    // Diplay Google static map of current location with a marker in the centre using Google Maps Staticdev API
+    // Visible map width is taken as 91.5% of device screen width
+
+    drawMap: function () {
+        var text = document.querySelector("#text").innerHTML;
+        console.log(text);
+        var splittext = text.split(" ", 7);
+        console.log(splittext);
+        var part0 = splittext[0];
+        var part1 = splittext[1];
+        var part2 = splittext[2];
+        var part3 = splittext[3];
+        var part4 = splittext[4];
+        var part5 = splittext[5];
+        var part6 = splittext[6];
+        var part6lesscomma = part6.split(",", 1);
+        part6 = part6lesscomma[0];
+        console.log(part0);
+        console.log(part1);
+        console.log(part2);
+        console.log(part3);
+        console.log(part4);
+        console.log(part5);
+        console.log(part6);
+        var iframe = document.createElement("iframe");
+        iframe.setAttribute("width", "100%");
+        iframe.setAttribute("height", "400");
+        iframe.setAttribute("frameborder", "0");
+        iframe.setAttribute("scrolling", "0");
+        iframe.setAttribute("marginheight", "0");
+        iframe.setAttribute("marginwidth", "0");
+        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 + "+" + part2 + "+" + part3 + "+" + part4 + "+" + part5 + "+" + part6 + "/@" + latitude + "," + longitude + ",17z&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
+        var output7 = document.querySelector("#map");
+        output7.appendChild(iframe);
+    },
+
+    closeModalWindow: function (ev) {
+        document.querySelector('[data-role=modal]').style.display = 'none';
+        document.querySelector('[data-role=overlay]').style.display = 'none';
+
+        var output4 = document.querySelector('#modal');
+        var p = document.querySelector('p');
+        output4.removeChild(p);
+
+    },
+
+    goBackFromMap: function (ev) {
+        document.querySelector('[data-role=page]#map').style.display = 'none';
+        document.querySelector('[data-role=page]').style.display = 'block';
+
+    },
+
+    // Handle the back button
+    //
+
+    browserBackButton: function (ev) {
+        //        alert("STOP");
+        ev.preventDefault();
+        tonk0006_midterm.closeModalWindow();
+
+        //        var pages = [],
+        //            links = [],
+        //            numLinks = 0,
+        //            numPages = 0;
+        //
+        //        var pages = document.querySelectorAll('[data-role="page"]');
+        //        numPages = pages.length;
+        //        url = location.hash;
+        //
+        //        for (var i = 0; i < numPages; i++) {
+        //            if (('#' + pages[i].id) == url) {
+        //                pages[i].style.display = 'block';
+        //                pages[i].style.zIndex = '15';
+        //            } else {
+        //                pages[i].style.display = 'none';
+        //                pages[i].style.zIndex = '3';
+        //            }
+        //        }
+    },
+
     // Failed to get the contacts
+    //
 
     foundNothing: function (contactError) {
         alert("Unable to display contacts!");
