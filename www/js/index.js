@@ -74,7 +74,7 @@ var tonk0006_midterm = {
         }
     },
 
-    // Display listview list on page. Set contacts array to localStorage.
+    // Display listview list on page. Set contacts array to localStorage. Initialize Hammer.js listeners.
     //
     foundContacts: function (contacts) {
         console.log('\n\tALL PHONE CONTACTS:');
@@ -86,7 +86,7 @@ var tonk0006_midterm = {
         output.appendChild(ul);
 
         var contactsArray = [];
-        for (var i = 0; i < 12; i++) {
+        for (var i = 20; i < 32; i++) {
 
             var contact = {};
             contact.id = i;
@@ -96,15 +96,6 @@ var tonk0006_midterm = {
                 contact.numbers = [];
                 for (var l = 0; l < contacts[i].phoneNumbers.length; l++) {
                     contact.numbers.push(contacts[i].phoneNumbers[l].type + ': ' + contacts[i].phoneNumbers[l].value + '\r');
-
-                    /*
-                    if (contacts[i].phoneNumbers.length > 1) {
-                        console.log ("MORE THEN 1");
-                        contact.numbers = [contacts[i].phoneNumbers[l].type, contacts[i].phoneNumbers[l].value];
-                    } else {
-                        contact.numbers = [contacts[i].phoneNumbers[0].type, contacts[i].phoneNumbers[0].value];
-                        console.log ("ONLY 1");
-                    }*/
                 }
             }
             contact.lat = '';
@@ -160,8 +151,6 @@ var tonk0006_midterm = {
     },
 
     displayFullContact: function (ev) {
-//        ev.stopPropagation();
-
         document.querySelector('[data-role=modal]').style.display = 'block';
         document.querySelector('[data-role=overlay]').style.display = 'block';
 
@@ -176,7 +165,7 @@ var tonk0006_midterm = {
         //        console.log(stringArr);
         var realArr = JSON.parse(stringArr);
         console.log(realArr);
-        var n = item;
+        var n = (item-20);
         p.innerHTML = realArr[n].name + '<br/>';
         var nummmm = realArr[n].numbers;
         console.log(nummmm);
@@ -305,16 +294,17 @@ var tonk0006_midterm = {
         console.log(part5);
         console.log(part6);
         var iframe = document.createElement("iframe");
+        var output7 = document.querySelector("#map");
+        output7.appendChild(iframe);
         iframe.setAttribute("width", "100%");
         iframe.setAttribute("height", "400");
         iframe.setAttribute("frameborder", "0");
         iframe.setAttribute("scrolling", "0");
         iframe.setAttribute("marginheight", "0");
         iframe.setAttribute("marginwidth", "0");
-        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 + "+" + part2 + "+" + part3 + "+" + part4 + "+" + part5 + "+" + part6 + "&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
+        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 +  "+" + part2 +  "+" + part3 +  "+" + part4 + "+" + part5 + "+" + part6 + "/@" + latitude + "," + longitude + ",17z&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
         //        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/view?key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk&center=" +  latitude + "," + longitude + "&zoom=13&maptype=roadmap");
-        var output7 = document.querySelector("#map");
-        output7.appendChild(iframe);
+        return iframe;
     },
 
     closeModalWindow: function (ev) {
