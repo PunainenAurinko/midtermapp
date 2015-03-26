@@ -18,9 +18,9 @@ var tonk0006_midterm = {
     bindEvents: function () {
         document.addEventListener('DOMContentLoaded', this.onContentLoaded, false);
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        document.addEventListener('backbutton', this.browserBackButton, false);
-        //        window.addEventListener('popstate', this.popstateEvent, false);
-        //        google.maps.event.addDomListener(window, 'load', this.mapInit, false);
+        document.addEventListener('backbutton', this.hardwareBackButton, false);
+        //            window.addEventListener('popstate', this.popstateEvent, false);
+        //            google.maps.event.addDomListener(window, 'load', this.mapInit, false);
     },
 
     // DOMContentLoaded event handler function
@@ -69,7 +69,7 @@ var tonk0006_midterm = {
             navigator.geolocation.getCurrentPosition(this.findCoordinates, this.gpsError, params);
 
         } else {
-            //browser does not support geolocation
+            //no support for geolocation
             alert("Sorry, somethign prevented your phone from determening your location.")
         }
     },
@@ -165,7 +165,7 @@ var tonk0006_midterm = {
         //        console.log(stringArr);
         var realArr = JSON.parse(stringArr);
         console.log(realArr);
-        var n = (item-20);
+        var n = (item - 20);
         p.innerHTML = realArr[n].name + '<br/>';
         var nummmm = realArr[n].numbers;
         console.log(nummmm);
@@ -240,39 +240,54 @@ var tonk0006_midterm = {
         });
     },
 
-    // Starting Code for Google JavaScript API v3 Map
-    // 
-
-    //    mapInit: function () {
-    //        var mapOptions = {
-    //                zoom: 4,
-    //                center: new google.maps.LatLng(latitude, longitude)
-    //            
-    //            },
+    //        // Starting Code for Google JavaScript API v3 Map
+    //        // 
+    //        mapInit: function () {
+    //            var mapOptions = {
+    //                    zoom: 13,
+    //                    center: new google.maps.LatLng(latitude, longitude)
     //
-    //            var map = new google.maps.Map(document.getElementById('map-canvas'),
-    //                mapOptions);
-    //
-    //        var marker = new google.maps.Marker({
-    //            position: map.getCenter(),
-    //            map: map,
-    //            title: 'Click to zoom'
-    //        });
-    //
+    //                },
 
-
-
-    //    mapInit: function () {
-    //        var mapOptions = {
-    //            zoom: 13,
-    //            center: new google.maps.LatLng(latitude, longitude),
-    //        }
-    //    },
 
     // Diplay dymanic Google map of current location with a marker in the centre
     // 
 
     drawMap: function () {
+
+        //        function initialize() {
+        //            var mapOptions = {
+        //                zoom: 4,
+        //                center: new google.maps.LatLng(latitude, longitude)
+        //            };
+        //
+        //            var map = new google.maps.Map(document.getElementById('map-canvas'),
+        //                mapOptions);
+        //
+        //            var marker = new google.maps.Marker({
+        //                position: map.getCenter(),
+        //                map: map,
+        //                title: 'Click to zoom'
+        //            });
+        //
+        //            google.maps.event.addListener(map, 'center_changed', function () {
+        //                // 3 seconds after the center of the map has changed, pan back to the
+        //                // marker.
+        //                window.setTimeout(function () {
+        //                    map.panTo(marker.getPosition());
+        //                }, 3000);
+        //            });
+        //
+        //            google.maps.event.addListener(marker, 'click', function () {
+        //                map.setZoom(8);
+        //                map.setCenter(marker.getPosition());
+        //            });
+        //        }
+        //
+        //        google.maps.event.addDomListener(window, 'load', initialize);
+
+        //Working code for displaying Google map in an iframe tag, using Google Maps Embed API
+        //
         var text = document.querySelector("#text").innerHTML;
         console.log(text);
         var splittext = text.split(" ", 7);
@@ -302,7 +317,7 @@ var tonk0006_midterm = {
         iframe.setAttribute("scrolling", "0");
         iframe.setAttribute("marginheight", "0");
         iframe.setAttribute("marginwidth", "0");
-        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 +  "+" + part2 +  "+" + part3 +  "+" + part4 + "+" + part5 + "+" + part6 + "/@" + latitude + "," + longitude + ",17z&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
+        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 + "+" + part2 + "+" + part3 + "+" + part4 + "+" + part5 + "+" + part6 + "/@" + latitude + "," + longitude + ",17z&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
         //        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/view?key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk&center=" +  latitude + "," + longitude + "&zoom=13&maptype=roadmap");
         return iframe;
     },
@@ -325,8 +340,7 @@ var tonk0006_midterm = {
 
     // Handle the back button
     //
-
-    browserBackButton: function (ev) {
+    hardwareBackButton: function (ev) {
         //        alert("STOP");
         ev.preventDefault();
         tonk0006_midterm.goBackFromMap();

@@ -116,6 +116,13 @@ p:last-child {
 iframe {
     margin-bottom: 0.5rem;
 }
+
+#map-canvas {
+    width: 90%;
+    height: 400px;
+    margin: 0 auto;
+    margin-bottom: 0.5rem;
+}
 /**************************************
           TITLE
 ***************************************/
