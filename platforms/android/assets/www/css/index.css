@@ -118,8 +118,10 @@ iframe {
 }
 
 #map-canvas {
-    width: 90%;
+/*
+    width: 95%;
     height: 400px;
+*/
     margin: 0 auto;
     margin-bottom: 0.5rem;
 }
