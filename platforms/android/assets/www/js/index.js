@@ -106,7 +106,7 @@ var tonk0006_midterm = {
         console.log('\n\tOUR 12 CONTACTS:');
         console.log(contactsArray);
 
-        console.log('\n\tJSON OBJECT FOR CONTACTS:');
+        console.log('\n\tJSON STRING CONTACTS ARRAY IN LOCAL STORAGE:');
         var s = JSON.stringify(contactsArray);
         console.log(s);
 
@@ -137,20 +137,10 @@ var tonk0006_midterm = {
         doubleTap.requireFailure(singleTap);
 
         hm.on('singletap', tonk0006_midterm.displayFullContact);
+        hm.on('doubletap', tonk0006_midterm.checkContactCooordinates);
+            
+//        hm.on('doubletap', tonk0006_midterm.displayDialog);
         
-                 //        if (contact has no coordinates stored in local storage)
-        
-//        var key1 = localStorage.getItem('lat');
-//        var key2 = localStorage.getItem('lng');
-//        
-//        if (key1 && key2 !==null) { 
-//        
-//        } else {
-//                
-//        }
-//        
-        hm.on('doubletap', tonk0006_midterm.displayDialog);
-
         var closeModal = new Hammer(document.getElementById('closeButton'));
         closeModal.on('tap', tonk0006_midterm.goBackAndClose);
         
@@ -159,6 +149,9 @@ var tonk0006_midterm = {
 
         var backFromMapPage = new Hammer(document.getElementById('backButton'));
         backFromMapPage.on('tap', tonk0006_midterm.goBackAndClose);
+            
+        // Working standard single click/tap event listeners just for the sake of it
+        //
 
         //        document.querySelector('[data-role=listview]').addEventListener('click', tonk0006_midterm.displayFullContact);
         //        document.getElementById('closeButton').addEventListener('click', tonk0006_midterm.goBackAndClose);
@@ -171,26 +164,60 @@ var tonk0006_midterm = {
         document.querySelector('[data-role=overlay]').style.display = 'block';
 
         var id = ev.target.getAttribute('data-ref');
-        var idVal = ev.target.innerHTML;
         document.getElementById('modal').value = id;
 
         var output2 = document.querySelector('#modal');
         var p = document.createElement('p');
-        var stringArr = localStorage.getItem('myContactsArray');
-        console.log('\n\tFROM LOCAL STORAGE:');
+        var stringArray = localStorage.getItem('myContactsArray');
+        console.log('\n\tON SINGLE CLICK:');
         //        console.log(stringArr);
-        var realArr = JSON.parse(stringArr);
-        console.log(realArr);
+        var realArray = JSON.parse(stringArray);
         var n = (id - 20); // This is needed only for my phone with "var n = (id - 20)" - to pick contacts starting from #20
-        console.log("Contact ID: " + n);
-        p.innerHTML = realArr[n].name + '<br/>';
-        var nummmm = realArr[n].numbers;
+        console.log('Contact ID: ' + n);
+        console.log('Contacts Array:')
+        console.log(realArray);
+        p.innerHTML = realArray[n].name + '<br/>';
+        var nummmm = realArray[n].numbers;
+        console.log('Phones Array:')
         console.log(nummmm);
-        var nummmmString = nummmm.join(" ");
+        var nummmmString = nummmm.join(' ');
         console.log(nummmmString);
         p.innerHTML += nummmmString;
         console.log(p);
         output2.appendChild(p);
+    },
+    
+    checkContactCooordinates: function (ev) {
+    
+            //  if contact has no coordinates stored in local storage
+        
+        var id = ev.target.getAttribute('data-ref');
+        //var idVal = ev.target.innerHTML;
+        document.querySelector('[data-role="listview"]').value = id;
+        
+        var stringArray = localStorage.getItem('myContactsArray');
+        var realArray = JSON.parse(stringArray);
+        var n = (id - 20); // Used for same reason as in displayFullContact
+        console.log('\n\tON DOUBLE CLICK:');
+        console.log('Contact ID: ' + n);
+        
+        if (realArray[n].lat.length !== 0 || realArray[n].lat.length !== 0) {
+            tonk0006_midterm.displayMapPage();
+        } else {
+            tonk0006_midterm.displayDialog();
+        }
+        
+//        var arr
+//        
+//        var key =  JSON.parse(localStorage.getItem('id'));
+//            
+//        if (key.value !== empty)
+//            
+//        var key1 = localStorage.getItem('lat');
+//        var key2 = localStorage.getItem('lng');
+//        
+//        if (key1 && key2) {} else {}
+        
     },
 
     displayDialog: function (ev) {
