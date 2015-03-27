@@ -259,6 +259,8 @@ var tonk0006_midterm = {
     // Get and display human-readable street address based on the found coordinates using Google Maps JavaScript API v3 Reverse Geocoding process
 
     // Full street address is transmitted interchengeably either in results[0].formatted_address or in results[1].formatted_address, therefore the inner if statement is used to pick between them
+    
+    // I have not implemented the redraw functionality yet, so that the function below shows different human readable address for each of the contacts. I will definitely do it later. 
 
     findStreetAddress: function () {
         var geocoder = new google.maps.Geocoder();
