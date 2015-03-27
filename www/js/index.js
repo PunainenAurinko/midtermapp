@@ -66,7 +66,6 @@ var tonk0006_midterm = {
             //no support for geolocation
             alert("Sorry, something prevented your phone from determening your location.")
         }
-
     },
     
     // Display listview list on page. Set contacts array to localStorage. Initialize Hammer.js listeners.
@@ -190,7 +189,7 @@ var tonk0006_midterm = {
     
     checkContactCooordinates: function (ev) {
     
-            //  if contact has no coordinates stored in local storage
+            //  Check if contact has no coordinates stored in local storage
         
         id = ev.target.getAttribute('data-ref');
         document.querySelector('[data-role="listview"]').value = id;
@@ -227,7 +226,7 @@ var tonk0006_midterm = {
         document.querySelector('[data-role=page]#map').style.display = 'block';
         document.querySelector('[data-role=modal]#dialog').style.display = 'none';
         document.querySelector('[data-role=overlay]').style.display = 'none';
-
+        
         tonk0006_midterm.drawMap();
 
     },
@@ -241,8 +240,9 @@ var tonk0006_midterm = {
         console.log("\n\tCOORDINATES:");
         console.log("Latitude: " + latitude);
         console.log("Longitude: " + longitude);
-
+        
         tonk0006_midterm.findStreetAddress();
+        
     },
 
     // Handle error messages for findCoordinates function
@@ -299,8 +299,34 @@ var tonk0006_midterm = {
         div.style.height = '400px';
         var output6 = document.querySelector('#map');
         output6.appendChild(div);
-
-        //        google.maps.event.addDomListener(window, 'load', this.mapInit);
+        
+        //  Check if contact has coordinates stored in local storage
+        
+        var stringArray = localStorage.getItem('myContactsArray');
+        var realArray = JSON.parse(stringArray);
+        var n = id; 
+        
+        if (realArray[n].lat.length !== 0 || realArray[n].lng.length !== 0) {
+            
+            latitude = realArray[n].lat;
+            longitude = realArray[n].lng; // the latitude & longitude are not reset after this point 
+            
+//            navigator.geolocation.getCurrentPosition(function(position) {
+//            latitude = position.coords.latitude;
+//            longitude = position.coords.longitude;
+//            console.log (latitude);
+//            console.log (longitude);
+//            });
+        } 
+//        else {
+//            
+////            // Redraw the map
+////            google.maps.event.trigger(map, 'resize');
+//////
+////            // Recenter the map               
+////            var reCenter = new google.maps.LatLng(latitude, longitude);
+////            map.setCenter(reCenter);
+//        }
         
         var mapOptions = {
             zoom: 14,
@@ -314,9 +340,9 @@ var tonk0006_midterm = {
         var marker = new google.maps.Marker({
             position: map.getCenter(),
             animation: google.maps.Animation.DROP,
-            map: map,
+            map: map
 //            animation: google.maps.Animation.BOUNCE,
-            title: 'Latitude: ' + latitude + '/nLongitude: ' + longitude
+//            title: 'Latitude: ' + latitude + '/nLongitude: ' + longitude
         });
         
 //        setTimeout(function(){ marker.setAnimation(google.maps.Animation.DROP); }, 2000);
@@ -325,8 +351,16 @@ var tonk0006_midterm = {
         map.setOptions({disableDoubleClickZoom: true });
         
         google.maps.event.addListener(map, 'dblclick', function (event) {
-            latitude = event.latLng.lat();
-            longitude = event.latLng.lng();
+            
+            // Redraw the map
+            google.maps.event.trigger(map, 'resize');
+
+            // Recenter the map               
+            var reCenter = new google.maps.LatLng(latitude, longitude);
+            map.setCenter(reCenter);
+            
+            var lat = event.latLng.lat();
+            var lng = event.latLng.lng();
             console.log('\n\tSET LAT & LNG TO LOCAL STORAGE:');
             //console.log(latitude + ', ' + longitude);
             
@@ -340,49 +374,25 @@ var tonk0006_midterm = {
             //console.log(obj);
 //            console.log(obj.lat); // Outputs an empty string as the lat is empty for now
 //            console.log(obj.lng); // Outputs an empty string as the lng is empty for now
-            obj.lat = latitude;
-            obj.lng = longitude;
+            obj.lat = lat;
+            obj.lng = lng;
             console.log('Contact\'s Name: ' + obj.name);
             console.log('Contact\'s Lat: ' +obj.lat);
             console.log('Contact\'s Lng: ' +obj.lng);
             console.log(obj);
             console.log(realArray);
-            localStorage.setItem('ContactsArray', realArray);
             var s = JSON.stringify(realArray);
             console.log('\n\tSTRING CONTACTS ARRAY IN LOCAL STORAGE WITH LAT & LNG SET FOR THIS CONTACT: ');
             console.log(s);
             localStorage.setItem('myContactsArray', s);
-            
-            
-//                        var contact = {};
-//            contact.id = i;
-//            contact.name = contacts[i].displayName;
-//
-//            if (contacts[i].phoneNumbers.length) {
-//                contact.numbers = [];
-//                for (var l = 0; l < contacts[i].phoneNumbers.length; l++) {
-//                    contact.numbers.push(contacts[i].phoneNumbers[l].type + ': ' + contacts[i].phoneNumbers[l].value + '\r');
-//                }
-//            }
-//            contact.lat = '';
-//            contact.lng = '';
-//            contactsArray.push(contact);
-            
-            
-            // Redraw the map
-            google.maps.event.trigger(map, 'resize');
-
-            // Recenter the map               
-            var reCenter = new google.maps.LatLng(latitude, longitude);
-            map.setCenter(reCenter);
             
             var marker = new google.maps.Marker({
                 position: google.maps.LatLng(latitude, longitude),
                 map: map,
                 draggable: true,
                 animation: google.maps.Animation.DROP,
-                animation: google.maps.Animation.BOUNCE,
-                title: 'Latitude: ' + latitude + '/nLongitude: ' + longitude
+                animation: google.maps.Animation.BOUNCE
+//                title: 'Latitude: ' + latitude + '/nLongitude: ' + longitude
             });
             
 
@@ -392,29 +402,44 @@ var tonk0006_midterm = {
 //            tonk0006_midterm.googleMapEvent();
         });
 
-        // Redraw the map
-        google.maps.event.trigger(map, 'resize');
-
-        // Recenter the map now that it's been redrawn               
-        var reCenter = new google.maps.LatLng(latitude, longitude);
-        map.setCenter(reCenter);
-
-    },
-    
-//    googleMapEvent: function (event) {
-//
-//        latitude = event.latLng.lat();
-//        longitude = event.latLng.lng();
-//        console.log( latitude + ', ' + longitude );
-//        
 //        // Redraw the map
 //        google.maps.event.trigger(map, 'resize');
 //
 //        // Recenter the map now that it's been redrawn               
 //        var reCenter = new google.maps.LatLng(latitude, longitude);
 //        map.setCenter(reCenter);
-//
-//},
+        
+        //tonk0006_midterm.findCoordinates();
+        
+        if (navigator.geolocation) {
+
+        var params = {
+            enableHighAccuracy: true,
+            timeout: 30000,
+            maximumAge: 90000
+        };
+
+        navigator.geolocation.getCurrentPosition(this.findCoordinatesAgain, this.gpsError, params);
+
+        } else {
+            //no support for geolocation
+            alert("Sorry, something prevented your phone from determening your location.")
+        }
+    },
+    
+    //Reset the coordinates again to original current position
+    //(I coudn't find a better way to reset coordinates, but I'm sure there is one!)
+    
+        findCoordinatesAgain: function (position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+
+        console.log("\n\tFOUND COORDINATES AGAIN:");
+        console.log("Latitude: " + latitude);
+        console.log("Longitude: " + longitude);
+    
+    },
+    
 
     //Working code for displaying Google map in an iframe tag, using Google Maps Embed API
     //
@@ -468,7 +493,7 @@ var tonk0006_midterm = {
         var div = document.querySelector("#map-canvas");
         if (div !== null)
             div.parentNode.removeChild(div);
-        
+
     },
 
     // Handle the back button
