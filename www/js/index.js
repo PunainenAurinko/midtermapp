@@ -72,7 +72,7 @@ var tonk0006_midterm = {
     // Display listview list on page. Set contacts array to localStorage. Initialize Hammer.js listeners.
     //
     foundContacts: function (contacts) {
-        console.log('\n\tALL PHONE CONTACTS:');
+        console.log('\n\tARRAY OF ALL PHONE CONTACTS:');
         console.log(contacts);
 
         var output = document.querySelector('#contacts');
@@ -173,15 +173,16 @@ var tonk0006_midterm = {
         //        console.log(stringArr);
         var realArray = JSON.parse(stringArray);
         var n = id; // This is needed only for my phone with "var n = (id - 20)" - to pick contacts starting from #20
-        console.log('Contact ID: ' + n);
-        console.log('Contacts Array:')
-        console.log(realArray);
+        console.log('Contact\'s ID: ' + n);
+        console.log('Contact\'s Name: ' + realArray[n].name);
         p.innerHTML = realArray[n].name + '<br/>';
         var nummmm = realArray[n].numbers;
+        //console.log('Contacts Array:')
+        //console.log(realArray);
         console.log('Phones Array:')
         console.log(nummmm);
         var nummmmString = nummmm.join(' ');
-        console.log(nummmmString);
+        console.log('Phones String: ' + nummmmString);
         p.innerHTML += nummmmString;
         console.log(p);
         output2.appendChild(p);
@@ -198,7 +199,8 @@ var tonk0006_midterm = {
         var realArray = JSON.parse(stringArray);
         var n = id; // Used for same reason as in displayFullContact
         console.log('\n\tON DOUBLE CLICK:');
-        console.log('Contact ID: ' + n);
+        console.log('Contact\'s ID: ' + n);
+        console.log('Contact\'s Name: ' + realArray[n].name);
         
         if (realArray[n].lat.length !== 0 || realArray[n].lat.length !== 0) {
             tonk0006_midterm.displayMapPage();
@@ -325,8 +327,8 @@ var tonk0006_midterm = {
         google.maps.event.addListener(map, 'dblclick', function (event) {
             latitude = event.latLng.lat();
             longitude = event.latLng.lng();
-            console.log('\n\tSET LAT & LNG:');
-            console.log(latitude + ', ' + longitude);
+            console.log('\n\tSET LAT & LNG TO LOCAL STORAGE:');
+            //console.log(latitude + ', ' + longitude);
             
             var stringArray = localStorage.getItem('myContactsArray');
             var realArray = JSON.parse(stringArray);
@@ -335,14 +337,22 @@ var tonk0006_midterm = {
             console.log('Contact\'s ID: ' + n);
 //            console.log(realArray);
             var obj = realArray[n];
-            console.log(obj);
-//            console.log(obj.lat); // Outputs empty string as the lat is empty for now
-//            console.log(obj.lng); // Outputs empty string as the lng is empty for now
+            //console.log(obj);
+//            console.log(obj.lat); // Outputs an empty string as the lat is empty for now
+//            console.log(obj.lng); // Outputs an empty string as the lng is empty for now
             obj.lat = latitude;
             obj.lng = longitude;
             console.log('Contact\'s Name: ' + obj.name);
-            console.log(obj.lat);
-            console.log(obj.lng);
+            console.log('Contact\'s Lat: ' +obj.lat);
+            console.log('Contact\'s Lng: ' +obj.lng);
+            console.log(obj);
+            console.log(realArray);
+            localStorage.setItem('ContactsArray', realArray);
+            var s = JSON.stringify(realArray);
+            console.log('\n\tSTRING CONTACTS ARRAY IN LOCAL STORAGE WITH LAT & LNG SET FOR THIS CONTACT: ');
+            console.log(s);
+            localStorage.setItem('myContactsArray', s);
+            
             
 //                        var contact = {};
 //            contact.id = i;
