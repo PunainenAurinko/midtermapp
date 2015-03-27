@@ -4,7 +4,7 @@ Student: Vladimir Tonkonogov
 Project: Midterm App built using HTML, CSS & JavaScript and compiled for Android using Cordova
  */
 
-// Application Constructor
+// App Constructor
 //
 var tonk0006_midterm = {
     latitude: '',
@@ -66,8 +66,9 @@ var tonk0006_midterm = {
             //no support for geolocation
             alert("Sorry, somethign prevented your phone from determening your location.")
         }
-    },
 
+    },
+    
     // Display listview list on page. Set contacts array to localStorage. Initialize Hammer.js listeners.
     //
     foundContacts: function (contacts) {
@@ -110,9 +111,16 @@ var tonk0006_midterm = {
         console.log(s);
 
         localStorage.setItem('myContactsArray', s);
+                        
+        tonk0006_midterm.enableNavigation();
 
-        // Hammer.js event listeners
-
+    },
+    
+        // Hammer.js event listeners and app navigation logic
+        //
+    
+        enableNavigation: function (nav) {
+    
         var hammer = document.querySelector('[data-role="listview"]');
         var hm = new Hammer.Manager(hammer);
         var singleTap = new Hammer.Tap({
@@ -129,6 +137,18 @@ var tonk0006_midterm = {
         doubleTap.requireFailure(singleTap);
 
         hm.on('singletap', tonk0006_midterm.displayFullContact);
+        
+                 //        if (contact has no coordinates stored in local storage)
+        
+//        var key1 = localStorage.getItem('lat');
+//        var key2 = localStorage.getItem('lng');
+//        
+//        if (key1 && key2 !==null) { 
+//        
+//        } else {
+//                
+//        }
+//        
         hm.on('doubletap', tonk0006_midterm.displayDialog);
 
         var closeModal = new Hammer(document.getElementById('closeButton'));
@@ -143,9 +163,9 @@ var tonk0006_midterm = {
         //        document.querySelector('[data-role=listview]').addEventListener('click', tonk0006_midterm.displayFullContact);
         //        document.getElementById('closeButton').addEventListener('click', tonk0006_midterm.goBackAndClose);
         //        document.getElementById('backButton').addEventListener('click', tonk0006_midterm.goBackAndClose);
-
+        
     },
-
+    
     displayFullContact: function (ev) {
         document.querySelector('[data-role=modal]#modal').style.display = 'block';
         document.querySelector('[data-role=overlay]').style.display = 'block';
@@ -175,15 +195,16 @@ var tonk0006_midterm = {
 
     displayDialog: function (ev) {
 
-        //        if (contact has no coordinates stored in local storage)
+       
         document.querySelector('[data-role=overlay]').style.display = 'block';
         document.querySelector('[data-role=modal]#dialog').style.display = 'block';
-
 
         var output8 = document.querySelector('#dialog');
         var p = document.createElement('p');
         p.innerHTML = 'Please enter contact coordinates by double-clicking anywhere on the map';
         output8.appendChild(p);
+        
+
     },
 
     displayMapPage: function () {
@@ -293,12 +314,6 @@ var tonk0006_midterm = {
         var reCenter = new google.maps.LatLng(latitude, longitude);
         map.setCenter(reCenter);
 
-        //        map.fitBounds(markers.reduce(function (bounds, marker) {
-        //            return bounds.extend(marker.getPosition());
-        //        }, new google.maps.LatLngBounds()));
-
-        //        drawMap();
-
     },
 
     //Working code for displaying Google map in an iframe tag, using Google Maps Embed API
@@ -363,8 +378,21 @@ var tonk0006_midterm = {
         ev.preventDefault();
         tonk0006_midterm.goBackAndClose();
         
+//        console.log(ev.currentTarget);
 //        if (ev.currentTarget > 5)
 //            navigator.app.exitApp();
+        
+//        or             
+//        
+//        function exitFromApp()
+//            {
+//                if (navigator.app) {
+//                   navigator.app.exitApp();
+//                }
+//                else if (navigator.device) {
+//                    navigator.device.exitApp();
+//                }
+//            }
     },
 
     // Failed to get the contacts
