@@ -206,18 +206,6 @@ var tonk0006_midterm = {
         } else {
             tonk0006_midterm.displayDialog();
         }
-        
-//        var arr
-//        
-//        var key =  JSON.parse(localStorage.getItem('id'));
-//            
-//        if (key.value !== empty)
-//            
-//        var key1 = localStorage.getItem('lat');
-//        var key2 = localStorage.getItem('lng');
-//        
-//        if (key1 && key2) {} else {}
-        
     },
 
     displayDialog: function (ev) {
@@ -231,7 +219,6 @@ var tonk0006_midterm = {
         p.innerHTML = 'Please enter contact coordinates by double-clicking anywhere on the map';
         output8.appendChild(p);
         
-
     },
 
     displayMapPage: function () {
@@ -240,11 +227,6 @@ var tonk0006_midterm = {
         document.querySelector('[data-role=page]#map').style.display = 'block';
         document.querySelector('[data-role=modal]#dialog').style.display = 'none';
         document.querySelector('[data-role=overlay]').style.display = 'none';
-
-        var output10 = document.querySelector('#dialog');
-        var p = document.querySelector('p');
-        if (p !== null)
-            output10.removeChild(p);
 
         tonk0006_midterm.drawMap();
 
@@ -313,12 +295,19 @@ var tonk0006_midterm = {
 
         var div = document.createElement('div');
         div.setAttribute('id', 'map-canvas');
-        div.style.width = "95%";
-        div.style.height = "400px";
-        var output6 = document.querySelector("#map");
+        div.style.width = '95%';
+        div.style.height = '400px';
+        var output6 = document.querySelector('#map');
         output6.appendChild(div);
 
         //        google.maps.event.addDomListener(window, 'load', this.mapInit);
+        
+        //        google.maps.event.addListener(marker, 'dblclick', function() {
+//            map.setZoom(8);
+//            map.setCenter(marker.getPosition());
+//        });
+        
+
 
         var mapOptions = {
             zoom: 14,
@@ -333,6 +322,34 @@ var tonk0006_midterm = {
             position: map.getCenter(),
             map: map,
         });
+        
+        map.setOptions({disableDoubleClickZoom: true });
+        
+        google.maps.event.addListener(map, 'dblclick', function (event) {
+            latitude = event.latLng.lat();
+            longitude = event.latLng.lng();
+            console.log( latitude + ', ' + longitude );
+            
+            //localStorage.setItem();
+            
+            var marker = new google.maps.Marker({
+                map: map,
+                draggable: true,
+                animation: google.maps.Animation.DROP,
+                position: google.maps.LatLng(latitude, longitude)
+            });
+            
+//            // Redraw the map
+//            google.maps.event.trigger(map, 'resize');
+
+            // Recenter the map               
+            var reCenter = new google.maps.LatLng(latitude, longitude);
+            map.setCenter(reCenter);
+            
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            
+//            tonk0006_midterm.googleMapEvent();
+        });
 
         // Redraw the map
         google.maps.event.trigger(map, 'resize');
@@ -342,6 +359,21 @@ var tonk0006_midterm = {
         map.setCenter(reCenter);
 
     },
+    
+//    googleMapEvent: function (event) {
+//
+//        latitude = event.latLng.lat();
+//        longitude = event.latLng.lng();
+//        console.log( latitude + ', ' + longitude );
+//        
+//        // Redraw the map
+//        google.maps.event.trigger(map, 'resize');
+//
+//        // Recenter the map now that it's been redrawn               
+//        var reCenter = new google.maps.LatLng(latitude, longitude);
+//        map.setCenter(reCenter);
+//
+//},
 
     //Working code for displaying Google map in an iframe tag, using Google Maps Embed API
     //
