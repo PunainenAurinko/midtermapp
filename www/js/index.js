@@ -17,11 +17,9 @@ var tonk0006_midterm = {
     // Bind Event Listeners
     //
     bindEvents: function () {
-        document.addEventListener('DOMContentLoaded', this.onContentLoaded, false);
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.addEventListener('backbutton', this.hardwareBackButton, false);
-        //            window.addEventListener('popstate', this.popstateEvent, false);
-        //google.maps.event.addDomListener(window, 'load', this.mapInit);
+        document.addEventListener('DOMContentLoaded', this.onContentLoaded, false);
     },
 
     // DOMContentLoaded event handler function
@@ -30,6 +28,8 @@ var tonk0006_midterm = {
         document.querySelector('[data-role=modal]').style.display = 'none';
         document.querySelector('[data-role=overlay]').style.display = 'none';
         document.querySelector('[data-role=page]#map').style.display = 'none';
+        document.querySelector('[data-role=modal]#dialog').style.display = 'none';
+        document.querySelector('[data-role=page]#contacts').style.display = 'block';
     },
 
     // deviceready Event Handler
@@ -37,13 +37,6 @@ var tonk0006_midterm = {
     onDeviceReady: function () {
         tonk0006_midterm.receivedEvent('deviceready');
     },
-
-    // popstate Event Handler
-    //
-    //    popstateEvent: function (event) {
-    //        console.log('popstate fired!');
-    //        updateContent(event.state);
-    //    },
 
     // Initiate Cordova specific APIs
     //
@@ -87,7 +80,7 @@ var tonk0006_midterm = {
         output.appendChild(ul);
 
         var contactsArray = [];
-        for (var i = 0; i < 12; i++) {
+        for (var i = 20; i < 32; i++) {
 
             var contact = {};
             contact.id = i;
@@ -133,31 +126,33 @@ var tonk0006_midterm = {
         });
 
         hm.add([doubleTap, singleTap]);
-        //        doubleTap.recognizeWith('singletap');
         doubleTap.requireFailure(singleTap);
 
         hm.on('singletap', tonk0006_midterm.displayFullContact);
-        hm.on('doubletap', tonk0006_midterm.displayMapPage);
+        hm.on('doubletap', tonk0006_midterm.displayDialog);
 
-        var modalClose = new Hammer(document.getElementById('closeButton'));
-        modalClose.on('tap', tonk0006_midterm.closeModalWindow);
+        var closeModal = new Hammer(document.getElementById('closeButton'));
+        closeModal.on('tap', tonk0006_midterm.goBackAndClose);
+        
+        var goToMap = new Hammer(document.getElementById('goToMap'));
+        goToMap.on('tap', tonk0006_midterm.displayMapPage);
 
         var backFromMapPage = new Hammer(document.getElementById('backButton'));
-        backFromMapPage.on('tap', tonk0006_midterm.goBackFromMap);
+        backFromMapPage.on('tap', tonk0006_midterm.goBackAndClose);
 
         //        document.querySelector('[data-role=listview]').addEventListener('click', tonk0006_midterm.displayFullContact);
-        //        document.getElementById('closeButton').addEventListener('click', tonk0006_midterm.closeModalWindow);
-        //        document.getElementById('backButton').addEventListener('click', tonk0006_midterm.goBackFromMap);
+        //        document.getElementById('closeButton').addEventListener('click', tonk0006_midterm.goBackAndClose);
+        //        document.getElementById('backButton').addEventListener('click', tonk0006_midterm.goBackAndClose);
 
     },
 
     displayFullContact: function (ev) {
-        document.querySelector('[data-role=modal]').style.display = 'block';
+        document.querySelector('[data-role=modal]#modal').style.display = 'block';
         document.querySelector('[data-role=overlay]').style.display = 'block';
 
-        var item = ev.target.getAttribute('data-ref');
-        var itemVal = ev.target.innerHTML;
-        document.getElementById('modal').value = item;
+        var id = ev.target.getAttribute('data-ref');
+        var idVal = ev.target.innerHTML;
+        document.getElementById('modal').value = id;
 
         var output2 = document.querySelector('#modal');
         var p = document.createElement('p');
@@ -166,7 +161,7 @@ var tonk0006_midterm = {
         //        console.log(stringArr);
         var realArr = JSON.parse(stringArr);
         console.log(realArr);
-        var n = item;
+        var n = (id - 20); // This is needed only for my phone with "var n = (id - 20)" - to pick contacts starting from #20
         console.log("Contact ID: " + n);
         p.innerHTML = realArr[n].name + '<br/>';
         var nummmm = realArr[n].numbers;
@@ -178,13 +173,32 @@ var tonk0006_midterm = {
         output2.appendChild(p);
     },
 
+    displayDialog: function (ev) {
+
+        //        if (contact has no coordinates stored in local storage)
+        document.querySelector('[data-role=overlay]').style.display = 'block';
+        document.querySelector('[data-role=modal]#dialog').style.display = 'block';
+
+
+        var output8 = document.querySelector('#dialog');
+        var p = document.createElement('p');
+        p.innerHTML = 'Please enter contact coordinates by double-clicking anywhere on the map';
+        output8.appendChild(p);
+    },
+
     displayMapPage: function () {
 
-        document.querySelector('[data-role=page]').style.display = 'none';
+        document.querySelector('[data-role=page]#contacts').style.display = 'none';
         document.querySelector('[data-role=page]#map').style.display = 'block';
-        document.querySelector('[data-role=page]#map').style.zIndex = '15';
-        
-        
+        document.querySelector('[data-role=modal]#dialog').style.display = 'none';
+        document.querySelector('[data-role=overlay]').style.display = 'none';
+
+        var output10 = document.querySelector('#dialog');
+        var p = document.querySelector('p');
+        if (p !== null)
+            output10.removeChild(p);
+
+        tonk0006_midterm.drawMap();
 
     },
 
@@ -237,7 +251,7 @@ var tonk0006_midterm = {
                 var output5 = document.querySelector("#map");
                 output5.appendChild(h4);
                 h4.setAttribute("id", "text");
-                tonk0006_midterm.drawMap();
+
             } else {
                 alert("Geocoder failed due to: " + status);
             }
@@ -255,15 +269,15 @@ var tonk0006_midterm = {
         div.style.height = "400px";
         var output6 = document.querySelector("#map");
         output6.appendChild(div);
-        
-//        google.maps.event.addDomListener(window, 'load', this.mapInit);
-        
+
+        //        google.maps.event.addDomListener(window, 'load', this.mapInit);
+
         var mapOptions = {
-            zoom: 13,
+            zoom: 14,
             center: new google.maps.LatLng(latitude, longitude),
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-                
+
         var map = new google.maps.Map(div,
             mapOptions);
 
@@ -271,7 +285,20 @@ var tonk0006_midterm = {
             position: map.getCenter(),
             map: map,
         });
-        
+
+        // Redraw the map
+        google.maps.event.trigger(map, 'resize');
+
+        // Recenter the map now that it's been redrawn               
+        var reCenter = new google.maps.LatLng(latitude, longitude);
+        map.setCenter(reCenter);
+
+        //        map.fitBounds(markers.reduce(function (bounds, marker) {
+        //            return bounds.extend(marker.getPosition());
+        //        }, new google.maps.LatLngBounds()));
+
+        //        drawMap();
+
     },
 
     //Working code for displaying Google map in an iframe tag, using Google Maps Embed API
@@ -312,34 +339,36 @@ var tonk0006_midterm = {
     //        return iframe;
     //     },
 
-    closeModalWindow: function (ev) {
-        document.querySelector('[data-role=modal]').style.display = 'none';
-        document.querySelector('[data-role=overlay]').style.display = 'none';
 
-        var output4 = document.querySelector('#modal');
+    // BUTTON CLOSE AND GO BACK FUNCTIONS --->>>>
+
+    goBackAndClose: function (ev) {
+        
+        tonk0006_midterm.onContentLoaded();
+
         var p = document.querySelector('p');
-        if (p !== null)
-            output4.removeChild(p);
-    },
-
-    goBackFromMap: function (ev) {
-        document.querySelector('[data-role=page]#map').style.display = 'none';
-        document.querySelector('[data-role=page]').style.display = 'block';
-
+        if (p !== null) 
+            p.parentNode.removeChild(p);
+        
+        var div = document.querySelector("#map-canvas");
+        if (div !== null)
+            div.parentNode.removeChild(div);
+        
     },
 
     // Handle the back button
     //
     hardwareBackButton: function (ev) {
-        //        alert("STOP");
+        //        alert("GOING BACK");
         ev.preventDefault();
-        tonk0006_midterm.goBackFromMap();
-        tonk0006_midterm.closeModalWindow();
+        tonk0006_midterm.goBackAndClose();
+        
+//        if (ev.currentTarget > 5)
+//            navigator.app.exitApp();
     },
 
     // Failed to get the contacts
     //
-
     foundNothing: function (contactError) {
         alert("Unable to display contacts!");
     }

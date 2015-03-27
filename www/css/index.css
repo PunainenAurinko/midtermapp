@@ -72,19 +72,7 @@ p:last-child {
 }
 
 [data-role=page]#map {
-    display: none;
-    position: absolute;
     z-index: 2;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100%;
-    top: 3rem;
-    color: #eee;
-    background-color: #444;
-    padding: 1rem;
-    border-radius: 15px;
-    border: 2px solid #eee;
 }
 
 [data-role=overlay] {
@@ -113,15 +101,18 @@ p:last-child {
     box-shadow: 1px 1px 2px rgb(0, 0, 0);
 }
 
+/*
 iframe {
     margin-bottom: 0.5rem;
 }
+*/
 
 #map-canvas {
-/*
+    /*
     width: 95%;
     height: 400px;
 */
+    
     margin: 0 auto;
     margin-bottom: 0.5rem;
 }
@@ -209,7 +200,8 @@ select {
         Modals
 *************************************/
 
-#closeButton {
+#closeButton,
+#goToMap {
     position: absolute;
     bottom: 1rem;
     margin: 0 auto;

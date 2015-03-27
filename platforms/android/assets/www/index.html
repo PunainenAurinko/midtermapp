@@ -35,7 +35,7 @@ Project: Midterm App built using HTML, CSS & JavaScript and compiled for Android
                 <input type="button" id="backButton" value="Back" class="btn" />
             </form>
         </div>
-<!--        <div id="map-canvas"></div>-->
+        <!--        <div id="map-canvas"></div>-->
     </section>
 
     <section data-role="overlay">&nbsp;</section>
@@ -49,11 +49,21 @@ Project: Midterm App built using HTML, CSS & JavaScript and compiled for Android
         </div>
     </section>
 
+    <section data-role="modal" id="dialog">
+        <h4>Contact position</h4>
+<!--        <p>Please enter contact coordinates by double-clicking anywhere on the map</p>-->
+        <div class="formBox">
+            <form>
+                <input type="button" id="goToMap" value="Go to map" class="btn" />
+            </form>
+        </div>
+    </section>
+
 </body>
- 
+
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk">
 </script>
-<script type="text/javascript" src="js/FastActive.min.js"></script>
+<!--<script type="text/javascript" src="js/FastActive.min.js"></script>-->
 <script type="text/javascript" src="js/hammer.min.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
