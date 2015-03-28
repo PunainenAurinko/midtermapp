@@ -171,7 +171,7 @@ var tonk0006_midterm = {
         console.log('\n\tON SINGLE CLICK:');
         //        console.log(stringArr);
         var realArray = JSON.parse(stringArray);
-        var n = id; // This is needed only for my phone with "var n = (id - 20)" - to pick contacts starting from #20
+        var n = id; // This is needed only for my phone with "var n = (id - 20)" - to be able to pick contacts starting from #20
         console.log('Contact\'s ID: ' + n);
         console.log('Contact\'s Name: ' + realArray[n].name);
         p.innerHTML = realArray[n].name + '<br/>';
@@ -196,7 +196,7 @@ var tonk0006_midterm = {
         
         var stringArray = localStorage.getItem('myContactsArray');
         var realArray = JSON.parse(stringArray);
-        var n = id; // Used for same reason as in displayFullContact
+        var n = id; // This is needed only for my phone with "var n = (id - 20)" - to be able to pick contacts starting from #20
         console.log('\n\tON DOUBLE CLICK:');
         console.log('Contact\'s ID: ' + n);
         console.log('Contact\'s Name: ' + realArray[n].name);
@@ -306,19 +306,12 @@ var tonk0006_midterm = {
         
         var stringArray = localStorage.getItem('myContactsArray');
         var realArray = JSON.parse(stringArray);
-        var n = id; 
+        var n = id; // This is needed only for my phone with "var n = (id - 20)" - to be able to pick contacts starting from #20
         
         if (realArray[n].lat.length !== 0 || realArray[n].lng.length !== 0) {
             
             latitude = realArray[n].lat;
             longitude = realArray[n].lng; // the latitude & longitude are not reset after this point 
-            
-//            navigator.geolocation.getCurrentPosition(function(position) {
-//            latitude = position.coords.latitude;
-//            longitude = position.coords.longitude;
-//            console.log (latitude);
-//            console.log (longitude);
-//            });
         } 
 //        else {
 //            
@@ -343,8 +336,6 @@ var tonk0006_midterm = {
             position: map.getCenter(),
             animation: google.maps.Animation.DROP,
             map: map
-//            animation: google.maps.Animation.BOUNCE,
-//            title: 'Latitude: ' + latitude + '/nLongitude: ' + longitude
         });
         
 //        setTimeout(function(){ marker.setAnimation(google.maps.Animation.DROP); }, 2000);
@@ -354,12 +345,12 @@ var tonk0006_midterm = {
         
         google.maps.event.addListener(map, 'dblclick', function (event) {
             
-            // Redraw the map
-            google.maps.event.trigger(map, 'resize');
-
-            // Recenter the map               
-            var reCenter = new google.maps.LatLng(latitude, longitude);
-            map.setCenter(reCenter);
+//            // Redraw the map
+//            google.maps.event.trigger(map, 'resize');
+//
+//            // Recenter the map               
+//            var reCenter = new google.maps.LatLng(latitude, longitude);
+//            map.setCenter(reCenter);
             
             var lat = event.latLng.lat();
             var lng = event.latLng.lng();
@@ -369,7 +360,7 @@ var tonk0006_midterm = {
             var stringArray = localStorage.getItem('myContactsArray');
             var realArray = JSON.parse(stringArray);
             
-            var n = id;
+            var n = id; // This is needed only for my phone with "var n = (id - 20)" - to be able to pick contacts starting from #20
             console.log('Contact\'s ID: ' + n);
 //            console.log(realArray);
             var obj = realArray[n];
@@ -388,17 +379,29 @@ var tonk0006_midterm = {
             console.log(s);
             localStorage.setItem('myContactsArray', s);
             
+            var mapOptions = {
+            zoom: 14,
+            center: new google.maps.LatLng(lat, lng),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var map = new google.maps.Map(document.querySelector('#map-canvas'),
+                mapOptions);
+
+//            var marker = new google.maps.Marker({
+//                position: map.getCenter(),
+//                animation: google.maps.Animation.DROP,
+//                map: map
+//            });
+//            
             var marker = new google.maps.Marker({
-                position: google.maps.LatLng(latitude, longitude),
+                position: new google.maps.LatLng(lat, lng),
                 map: map,
                 draggable: true,
-                animation: google.maps.Animation.DROP,
-                animation: google.maps.Animation.BOUNCE
-//                title: 'Latitude: ' + latitude + '/nLongitude: ' + longitude
+                animation: google.maps.Animation.DROP
             });
             
-
-            //setTimeout(function(){ marker.setAnimation(google.maps.Animation.BOUNCE); }, 3000);
+            setTimeout(function(){ marker.setAnimation(google.maps.Animation.BOUNCE); }, 2000);
         
             
 //            tonk0006_midterm.googleMapEvent();
