@@ -241,7 +241,7 @@ var tonk0006_midterm = {
         console.log("Latitude: " + latitude);
         console.log("Longitude: " + longitude);
         
-        tonk0006_midterm.findStreetAddress();
+        //tonk0006_midterm.findStreetAddress();
         
     },
 
@@ -256,52 +256,10 @@ var tonk0006_midterm = {
         alert("Error: " + errors[error.code]);
     },
 
-    // Get and display human-readable street address based on the found coordinates using Google Maps JavaScript API v3 Reverse Geocoding process
-
-    // Full street address is transmitted interchengeably either in results[0].formatted_address or in results[1].formatted_address, therefore the inner if statement is used to pick between them
-    
-    // I have not implemented the redraw functionality yet, so that the function below shows different human readable address for each of the contacts. I will definitely do it later. 
-
-    findStreetAddress: function () {
-        var geocoder = new google.maps.Geocoder();
-        var latlng = new google.maps.LatLng(latitude, longitude);
-        geocoder.geocode({
-            'latLng': latlng
-        }, function (results, status) {
-            console.log("\n\tGEOCODING:");
-            console.log("Geocoding status: " + status);
-            console.log(results);
-            if (status == google.maps.GeocoderStatus.OK) {
-                console.log("Address 0: " + results[0].formatted_address);
-                console.log("Address 1: " + results[1].formatted_address + "\n");
-                var h4 = document.createElement("h4");
-                if (results[1].formatted_address.length > results[0].formatted_address.length) {
-                    h4.innerHTML = results[1].formatted_address;
-                } else {
-                    h4.innerHTML = results[0].formatted_address;
-                }
-                var output5 = document.querySelector("#map");
-                output5.appendChild(h4);
-                h4.setAttribute("id", "text");
-
-            } else {
-                alert("Geocoder failed due to: " + status);
-            }
-        });
-    },
-
     // Diplay dynamic Google map of current position with a marker in the centre using  Google JavaScript API v3
     // 
-
     drawMap: function () {
 
-        var div = document.createElement('div');
-        div.setAttribute('id', 'map-canvas');
-        div.style.width = '95%';
-        div.style.height = '400px';
-        var output6 = document.querySelector('#map');
-        output6.appendChild(div);
-        
         //  Check if contact has coordinates stored in local storage
         
         var stringArray = localStorage.getItem('myContactsArray');
@@ -310,6 +268,21 @@ var tonk0006_midterm = {
         
         var lat = (realArray[n].lat || latitude);
         var lng = (realArray[n].lng || longitude);
+        
+        // Call Reverse Geocoding function to display street address
+        
+        tonk0006_midterm.findStreetAddress(lat, lng);
+        
+        // Create the div to display the map in
+        
+        var div = document.createElement('div');
+        div.setAttribute('id', 'map-canvas');
+        div.style.width = '95%';
+        div.style.height = '400px';
+        var output6 = document.querySelector('#map');
+        output6.appendChild(div);
+        
+        // Create map
         
         var mapOptions = {
             zoom: 14,
@@ -326,14 +299,23 @@ var tonk0006_midterm = {
             map: map
         });
         
-        setTimeout(function(){ marker.setAnimation(google.maps.Animation.BOUNCE); }, 2000);
+        setTimeout(function(){ marker.setAnimation(google.maps.Animation.BOUNCE); }, 1500);
         
         map.setOptions({disableDoubleClickZoom: true });
+        
+        // Google map doule click listener function
         
         google.maps.event.addListener(map, 'dblclick', function (event) {
             
             var lat = event.latLng.lat();
             var lng = event.latLng.lng();
+            
+            var h4 = document.querySelector('h4');
+            if (h4 !== null) // or simply if(h4) 
+                output6.removeChild(h4);
+            
+            tonk0006_midterm.findStreetAddress(lat, lng);            
+            
             console.log('\n\tSET LAT & LNG TO LOCAL STORAGE:');
                         
             var stringArray = localStorage.getItem('myContactsArray');
@@ -377,51 +359,45 @@ var tonk0006_midterm = {
             var reCenter = new google.maps.LatLng(lat, lng);
             map.setCenter(reCenter);
             
-            setTimeout(function(){ marker.setAnimation(google.maps.Animation.BOUNCE); }, 2000);
+            setTimeout(function(){ marker.setAnimation(google.maps.Animation.BOUNCE); }, 1500);
 
         });
 
     },
     
-    //Working code for displaying Google map in an iframe tag, using Google Maps Embed API
-    //
+        // Get and display human-readable street address based on the passed coordinates using Google Maps JavaScript API v3 Reverse Geocoding process
 
-    //    drawMap: function () {
-    //        var text = document.querySelector("#text").innerHTML;
-    //        console.log(text);
-    //        var splittext = text.split(" ", 7);
-    //        console.log(splittext);
-    //        var part0 = splittext[0];
-    //        var part1 = splittext[1];
-    //        var part2 = splittext[2];
-    //        var part3 = splittext[3];
-    //        var part4 = splittext[4];
-    //        var part5 = splittext[5];
-    //        var part6 = splittext[6];
-    //        var part6lesscomma = part6.split(",", 1);
-    //        part6 = part6lesscomma[0];
-    //        console.log(part0);
-    //        console.log(part1);
-    //        console.log(part2);
-    //        console.log(part3);
-    //        console.log(part4);
-    //        console.log(part5);
-    //        console.log(part6);
-    //        var iframe = document.createElement("iframe");
-    //        var output7 = document.querySelector("#map");
-    //        output7.appendChild(iframe);
-    //        iframe.setAttribute("width", "100%");
-    //        iframe.setAttribute("height", "400");
-    //        iframe.setAttribute("frameborder", "0");
-    //        iframe.setAttribute("scrolling", "0");
-    //        iframe.setAttribute("marginheight", "0");
-    //        iframe.setAttribute("marginwidth", "0");
-    //        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/place?q=" + part0 + "+" + part1 + "+" + part2 + "+" + part3 + "+" + part4 + "+" + part5 + "+" + part6 + "/@" + latitude + "," + longitude + ",17z&zoom=13&key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk");
-    //        //        iframe.setAttribute("src", "https://www.google.com/maps/embed/v1/view?key=AIzaSyDP68CXSK9TynSN4n_Moo7PPakL8SQM0xk&center=" +  latitude + "," + longitude + "&zoom=13&maptype=roadmap");
-    //        return iframe;
-    //     },
+    // Full street address is transmitted interchengeably either in results[0].formatted_address or in results[1].formatted_address, therefore the inner if statement is used to pick between them
 
+    findStreetAddress: function (lat,lng) {
+        var geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(lat, lng);
+        geocoder.geocode({
+            'latLng': latlng
+        }, function (results, status) {
+            console.log("\n\tGEOCODING:");
+            console.log("Geocoding status: " + status);
+            console.log(results);
+            if (status == google.maps.GeocoderStatus.OK) {
+                console.log("Address 0: " + results[0].formatted_address);
+                console.log("Address 1: " + results[1].formatted_address + "\n");
+                var h4 = document.createElement("h4");
+                if (results[1].formatted_address.length > results[0].formatted_address.length) {
+                    h4.innerHTML = results[1].formatted_address;
+                } else {
+                    h4.innerHTML = results[0].formatted_address;
+                }
+                var parent = document.querySelector('#map');
+                var firstChild = document.querySelector('.formBox');
+                parent.insertBefore(h4, firstChild.nextSibling);
+                h4.setAttribute('id', 'text');
 
+            } else {
+                alert("Geocoder failed due to: " + status);
+            }
+        });
+    },
+    
     // BUTTON CLOSE AND GO BACK FUNCTIONS --->>>>
 
     goBackAndClose: function (ev) {
@@ -435,6 +411,10 @@ var tonk0006_midterm = {
         var div = document.querySelector("#map-canvas");
         if (div !== null) // or simply if(div)
             div.parentNode.removeChild(div);
+        
+        var h4 = document.querySelector('#text');
+            if (h4 !== null) // or simply if(h4) 
+                h4.parentNode.removeChild(h4);
 
     },
 
