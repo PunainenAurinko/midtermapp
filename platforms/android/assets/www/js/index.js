@@ -308,61 +308,39 @@ var tonk0006_midterm = {
         var realArray = JSON.parse(stringArray);
         var n = id; // This is needed only for my phone with "var n = (id - 20)" - to be able to pick contacts starting from #20
         
-        if (realArray[n].lat.length !== 0 || realArray[n].lng.length !== 0) {
-            
-            latitude = realArray[n].lat;
-            longitude = realArray[n].lng; // the latitude & longitude are not reset after this point 
-        } 
-//        else {
-//            
-////            // Redraw the map
-////            google.maps.event.trigger(map, 'resize');
-//////
-////            // Recenter the map               
-////            var reCenter = new google.maps.LatLng(latitude, longitude);
-////            map.setCenter(reCenter);
-//        }
+        var lat = (realArray[n].lat || latitude);
+        var lng = (realArray[n].lng || longitude);
         
         var mapOptions = {
             zoom: 14,
-            center: new google.maps.LatLng(latitude, longitude),
+            center: new google.maps.LatLng(lat, lng),
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-
+        
         var map = new google.maps.Map(div,
             mapOptions);
-
+        
         var marker = new google.maps.Marker({
             position: map.getCenter(),
             animation: google.maps.Animation.DROP,
             map: map
         });
         
-//        setTimeout(function(){ marker.setAnimation(google.maps.Animation.DROP); }, 2000);
         setTimeout(function(){ marker.setAnimation(google.maps.Animation.BOUNCE); }, 2000);
         
         map.setOptions({disableDoubleClickZoom: true });
         
         google.maps.event.addListener(map, 'dblclick', function (event) {
             
-//            // Redraw the map
-//            google.maps.event.trigger(map, 'resize');
-//
-//            // Recenter the map               
-//            var reCenter = new google.maps.LatLng(latitude, longitude);
-//            map.setCenter(reCenter);
-            
             var lat = event.latLng.lat();
             var lng = event.latLng.lng();
             console.log('\n\tSET LAT & LNG TO LOCAL STORAGE:');
-            //console.log(latitude + ', ' + longitude);
-            
+                        
             var stringArray = localStorage.getItem('myContactsArray');
             var realArray = JSON.parse(stringArray);
             
             var n = id; // This is needed only for my phone with "var n = (id - 20)" - to be able to pick contacts starting from #20
             console.log('Contact\'s ID: ' + n);
-//            console.log(realArray);
             var obj = realArray[n];
             //console.log(obj);
 //            console.log(obj.lat); // Outputs an empty string as the lat is empty for now
@@ -388,12 +366,6 @@ var tonk0006_midterm = {
             var map = new google.maps.Map(document.querySelector('#map-canvas'),
                 mapOptions);
 
-//            var marker = new google.maps.Marker({
-//                position: map.getCenter(),
-//                animation: google.maps.Animation.DROP,
-//                map: map
-//            });
-//            
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, lng),
                 map: map,
@@ -401,51 +373,16 @@ var tonk0006_midterm = {
                 animation: google.maps.Animation.DROP
             });
             
-            setTimeout(function(){ marker.setAnimation(google.maps.Animation.BOUNCE); }, 2000);
-        
+            //Recenter the map               
+            var reCenter = new google.maps.LatLng(lat, lng);
+            map.setCenter(reCenter);
             
-//            tonk0006_midterm.googleMapEvent();
+            setTimeout(function(){ marker.setAnimation(google.maps.Animation.BOUNCE); }, 2000);
+
         });
 
-//        // Redraw the map
-//        google.maps.event.trigger(map, 'resize');
-//
-//        // Recenter the map now that it's been redrawn               
-//        var reCenter = new google.maps.LatLng(latitude, longitude);
-//        map.setCenter(reCenter);
-        
-        //tonk0006_midterm.findCoordinates();
-        
-        if (navigator.geolocation) {
-
-        var params = {
-            enableHighAccuracy: true,
-            timeout: 30000,
-            maximumAge: 90000
-        };
-
-        navigator.geolocation.getCurrentPosition(this.findCoordinatesAgain, this.gpsError, params);
-
-        } else {
-            //no support for geolocation
-            alert("Sorry, something prevented your phone from determening your location.")
-        }
     },
     
-    //Reset the coordinates again to original current position
-    //(I coudn't find a better way to reset coordinates, but I'm sure there is one!)
-    
-        findCoordinatesAgain: function (position) {
-        latitude = position.coords.latitude;
-        longitude = position.coords.longitude;
-
-        console.log("\n\tFOUND COORDINATES AGAIN:");
-        console.log("Latitude: " + latitude);
-        console.log("Longitude: " + longitude);
-    
-    },
-    
-
     //Working code for displaying Google map in an iframe tag, using Google Maps Embed API
     //
 
@@ -492,11 +429,11 @@ var tonk0006_midterm = {
         tonk0006_midterm.onContentLoaded();
 
         var p = document.querySelector('p');
-        if (p !== null) 
+        if (p !== null) // or simply if(p) 
             p.parentNode.removeChild(p);
         
         var div = document.querySelector("#map-canvas");
-        if (div !== null)
+        if (div !== null) // or simply if(div)
             div.parentNode.removeChild(div);
 
     },
@@ -507,23 +444,17 @@ var tonk0006_midterm = {
         //        alert("GOING BACK");
         ev.preventDefault();
         tonk0006_midterm.goBackAndClose();
-        
-//        console.log(ev.currentTarget);
-//        if (ev.currentTarget > 5)
-//            navigator.app.exitApp();
-        
-//        or             
-//        
-//        function exitFromApp()
-//            {
-//                if (navigator.app) {
-//                   navigator.app.exitApp();
-//                }
-//                else if (navigator.device) {
-//                    navigator.device.exitApp();
-//                }
-//            }
     },
+    
+//    exitFromApp: function () {
+//
+//        if (navigator.app) {
+//           navigator.app.exitApp();
+//        }
+//        else if (navigator.device) {
+//            navigator.device.exitApp();
+//        }
+//    },
 
     // Failed to get the contacts
     //
